@@ -1,0 +1,501 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Deep Review · Smart Picks — Amazon Product Reviews & Guides</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="Deep Review · Smart Picks: editorial-style Amazon product reviews and buying guides. This site participates in the Amazon Associates Program; some links are affiliate links." />
+  <style>
+    :root{
+      --bg:#f5f5f5;
+      --ink:#111827;
+      --muted:#6b7280;
+      --accent:#f97316;
+      --accent-soft:#ffedd5;
+      --border:#e5e7eb;
+      --card:#ffffff;
+      --maxw:1200px;
+      --radius:14px;
+      --font:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:var(--font);background:var(--bg);color:var(--ink);line-height:1.7}
+    a{text-decoration:none;color:inherit}
+    header{background:#ffffff;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:20}
+    .wrap{max-width:var(--maxw);margin:0 auto;padding:14px 20px}
+    .brand-row{display:flex;align-items:center;justify-content:space-between;gap:16px}
+    .logo{font-size:1.4rem;font-weight:800;color:var(--accent)}
+    .tagline{font-size:.9rem;color:var(--muted)}
+    nav{margin-top:8px;font-size:.9rem}
+    nav a{margin-right:16px;color:var(--muted);font-weight:600}
+    nav a:hover{color:var(--ink)}
+    main{max-width:var(--maxw);margin:0 auto;padding:20px}
+    .hero{display:grid;grid-template-columns:3fr 2fr;gap:18px}
+    @media(max-width:900px){.hero{grid-template-columns:1fr}}
+    .hero-main{background:var(--card);border-radius:var(--radius);padding:20px;border:1px solid var(--border);box-shadow:0 16px 40px rgba(15,23,42,0.08)}
+    .hero-main h1{font-size:1.8rem;margin-bottom:8px}
+    .hero-main p{font-size:.98rem;color:var(--muted)}
+    .hero-meta{margin-top:10px;font-size:.85rem;color:var(--muted)}
+    .hero-meta span{margin-right:12px}
+    .hero-side{background:var(--card);border-radius:var(--radius);padding:18px;border:1px solid var(--border)}
+    .hero-side h2{font-size:1.05rem;margin-bottom:4px}
+    .hero-side ul{margin-left:18px;margin-top:8px;font-size:.9rem;color:var(--muted)}
+    .search{margin-top:16px;display:flex;gap:8px}
+    .search input{flex:1;padding:9px 11px;border-radius:999px;border:1px solid var(--border);font-size:.9rem}
+    .search button{border:none;border-radius:999px;background:var(--accent);color:#fff;font-weight:700;font-size:.9rem;padding:9px 14px;cursor:pointer}
+    .chips{margin-top:12px;display:flex;flex-wrap:wrap;gap:8px}
+    .chip{padding:5px 11px;border-radius:999px;border:1px solid var(--border);font-size:.82rem;color:var(--muted);cursor:pointer;background:#fff}
+    .chip.active{background:var(--accent-soft);border-color:var(--accent);color:#c2410c}
+    .list-head{display:flex;justify-content:space-between;align-items:flex-end;margin-top:26px}
+    .list-head h2{font-size:1.25rem}
+    .list-head .sub{font-size:.9rem;color:var(--muted);margin-top:4px}
+    .count{font-size:.85rem;color:var(--muted)}
+    .grid{margin-top:14px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+    @media(max-width:1050px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+    @media(max-width:720px){.grid{grid-template-columns:1fr}}
+    .card{background:var(--card);border-radius:var(--radius);border:1px solid var(--border);padding:14px;display:flex;flex-direction:column;gap:10px;box-shadow:0 8px 20px rgba(15,23,42,0.06)}
+    .thumb{height:180px;border-radius:10px;overflow:hidden}
+    .thumb img{width:100%;height:100%;object-fit:cover}
+    .cat{font-size:.8rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+    .title{font-size:1rem;font-weight:600}
+    .snippet{font-size:.9rem;color:var(--muted);min-height:3.2em}
+    .meta{display:flex;justify-content:space-between;align-items:center;margin-top:auto}
+    .price{font-size:.95rem;font-weight:700;color:#16a34a}
+    .btn-row{display:flex;gap:8px}
+    .btn{border-radius:999px;font-size:.85rem;padding:7px 12px;border:1px solid var(--border);cursor:pointer;background:#fff}
+    .btn-primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+    .btn-primary:hover{background:#ea580c}
+    .btn-ghost{background:#fff;color:var(--muted)}
+    .btn-ghost:hover{background:#f3f4f6}
+    .load-wrap{text-align:center;margin-top:16px}
+    .load-wrap button{border-radius:999px;padding:8px 16px;border:1px solid var(--border);background:#fff;font-size:.9rem;cursor:pointer}
+    .detail{margin-top:26px;display:none}
+    .detail-inner{background:var(--card);border-radius:var(--radius);border:1px solid var(--border);padding:18px;display:grid;grid-template-columns:320px 1fr;gap:18px;box-shadow:0 10px 28px rgba(15,23,42,0.08)}
+    @media(max-width:900px){.detail-inner{grid-template-columns:1fr}}
+    .detail-inner img{width:100%;border-radius:10px}
+    .detail-title{font-size:1.3rem;font-weight:700;margin-bottom:4px}
+    .detail-meta{font-size:.85rem;color:var(--muted);margin-bottom:8px}
+    .pill-row{display:flex;flex-wrap:wrap;gap:8px;font-size:.78rem;margin-bottom:12px}
+    .pill{padding:4px 9px;border-radius:999px;background:#f3f4f6;color:#4b5563}
+    .detail-body p{margin-bottom:8px;font-size:.93rem;color:#374151}
+    .detail-actions{margin-top:12px;display:flex;flex-wrap:wrap;gap:10px}
+    .section{margin-top:26px;background:var(--card);border-radius:var(--radius);border:1px solid var(--border);padding:18px;font-size:.93rem;color:#374151}
+    .section h2{font-size:1.15rem;margin-bottom:6px}
+    .section p{margin-bottom:8px}
+    .section ul{margin-left:18px;margin-bottom:6px}
+    .section li{margin-bottom:4px}
+    footer{border-top:1px solid var(--border);margin-top:28px}
+    footer .wrap{padding-top:16px;padding-bottom:18px;text-align:center;font-size:.85rem;color:var(--muted)}
+    @media(max-width:600px){
+      .brand-row{flex-direction:column;align-items:flex-start}
+    }
+  </style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="brand-row">
+      <div>
+        <div class="logo">Deep Review · Smart Picks</div>
+        <div class="tagline">Editorial-style Amazon product reviews & buying advice · Not affiliated with Amazon, Inc.</div>
+      </div>
+      <div style="font-size:.8rem;color:var(--muted)">Focus: Electronics · Home · Kitchen · Outdoor · Audio & Video · Car · Office · Sports</div>
+    </div>
+    <nav>
+      <a href="#home">Home</a>
+      <a href="#guides">Buying Guide</a>
+      <a href="#about">About</a>
+      <a href="#privacy">Privacy</a>
+      <a href="#disclosure">Affiliate Disclosure</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <section id="home" class="hero" aria-label="Intro">
+    <article class="hero-main">
+      <h1>We help you ignore 80% of products that aren’t worth your time.</h1>
+      <p>Instead of copying product descriptions, we summarise real-world use cases, pros & cons and clear buying advice. The products on this page are example entries that demonstrate a safe, compliant way to structure an Amazon affiliate site for review and content evaluation.</p>
+      <div class="hero-meta">
+        <span>· 8 everyday categories</span>
+        <span>· 100 editorial-style entries</span>
+        <span>· Each with a clear recommendation</span>
+      </div>
+      <div class="search" role="search">
+        <input id="searchInput" placeholder="Search by product name, category or keyword e.g. headphones, camping, desk lamp" />
+        <button id="searchBtn">Search</button>
+      </div>
+      <div class="chips" aria-label="Category filters">
+        <div class="chip active" data-cat="All">All</div>
+        <div class="chip" data-cat="Electronics">Electronics</div>
+        <div class="chip" data-cat="Home">Home</div>
+        <div class="chip" data-cat="Kitchen">Kitchen</div>
+        <div class="chip" data-cat="Outdoor">Outdoor</div>
+        <div class="chip" data-cat="Audio & Video">Audio & Video</div>
+        <div class="chip" data-cat="Car">Car</div>
+        <div class="chip" data-cat="Office">Office</div>
+        <div class="chip" data-cat="Sports">Sports</div>
+      </div>
+    </article>
+    <aside class="hero-side">
+      <h2>How to read these reviews</h2>
+      <p style="font-size:.9rem;color:#4b5563;">Each entry highlights three key points: <strong>product role</strong>, <strong>main strengths &amp; trade-offs</strong>, and <strong>who it’s actually for</strong>. Think of this page as an editorial shortlist that narrows down your choices before you dive into detailed specs on Amazon.</p>
+      <ul>
+        <li>Filter by category to match your real-world scenario;</li>
+        <li>Click “Read review” to see the full breakdown;</li>
+        <li>Only then, follow through to Amazon if it still looks relevant.</li>
+      </ul>
+      <p style="font-size:.85rem;color:var(--muted);margin-top:4px;">
+        Note: The entries below are example structures. Availability, pricing and final details are always determined by Amazon’s own product pages.
+      </p>
+    </aside>
+  </section>
+
+  <section aria-label="Product list">
+    <div class="list-head">
+      <div>
+        <h2>Featured product short-list</h2>
+        <div class="sub">Editorial-style example content designed to show how a compliant Amazon affiliate site can be structured.</div>
+      </div>
+      <div class="count" id="countInfo"></div>
+    </div>
+    <div class="grid" id="productGrid"></div>
+    <div class="load-wrap">
+      <button id="loadMoreBtn">Load more products</button>
+    </div>
+  </section>
+
+  <section class="detail" id="detailSection" aria-label="Product detail">
+    <div class="detail-inner" id="detailInner"></div>
+  </section>
+
+  <section id="guides" class="section">
+    <h2>Buying guide: three questions before you click “Buy now”</h2>
+    <p>Whether you’re shopping for headphones, an air fryer or camping gear, it helps to pause and answer three quick questions:</p>
+    <ul>
+      <li><strong>Where will you actually use it?</strong> At home, at the office, on the commute, or out in the field?</li>
+      <li><strong>What’s your realistic budget?</strong> This decides whether you should look at entry-level, mid-range or premium options.</li>
+      <li><strong>Which 2–3 things matter most?</strong> For example: noise, battery life, weight, ease of cleaning, storage space, or warranty.</li>
+    </ul>
+    <p>Every review on this page is written to support those questions so you can make a decision in 3–5 minutes instead of getting lost in endless product lists.</p>
+  </section>
+
+  <section id="about" class="section">
+    <h2>About this site</h2>
+    <p>“Deep Review · Smart Picks” is an independently operated content site. We are not affiliated with Amazon or any specific brand. Our goal is to summarise public information, user feedback and product specs into concise, editorial-style overviews that are genuinely helpful for everyday buyers.</p>
+    <p>Rather than chasing hype or copying marketing copy, we aim to clarify what a product actually does well, what it compromises on, and which kind of user is likely to benefit from it.</p>
+  </section>
+
+  <section id="privacy" class="section">
+    <h2>Privacy policy (short version)</h2>
+    <p>This site may use cookies or third-party analytics tools (for example, basic traffic statistics) to understand how readers use our pages and to improve layout and content over time. We do not sell or rent personally identifiable visitor data.</p>
+    <p>If we later add email newsletters, forms or other features that collect personal information, those sections will include a clear explanation of what is collected and how you can opt out or have your data removed.</p>
+  </section>
+
+  <section id="disclosure" class="section">
+    <h2>Affiliate disclosure</h2>
+    <p>This website participates in the Amazon Associates Program and related international affiliate programmes. Some links on this site are affiliate links. If you click through and make a qualifying purchase on Amazon, we may earn a commission.</p>
+    <p>This does not change your price, and it does not override our editorial judgment. Treat these links as a way to support independent review work while doing your normal shopping.</p>
+    <p style="font-size:.85rem;color:#6b7280;">
+      As an Amazon Associate we earn from qualifying purchases.
+    </p>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    © <span id="year"></span> Deep Review · Smart Picks · Amazon Associates ID: <span id="tagText"></span><br/>
+    This site is an editorial-style example of how to structure a compliant Amazon affiliate website.
+  </div>
+</footer>
+
+<script>
+  // ========= MULTI-COUNTRY CONFIG =========
+  // Change this per site: "US" or "UK" (you can add DE/FR... later)
+  const SITE = 'US';  // US site; in your UK repo change to 'UK'
+
+  const SITE_CONFIG = {
+    US: { domain: 'com',   tag: 'us1987-20',  label: 'United States' },
+    UK: { domain: 'co.uk', tag: 'uk0e42-21',  label: 'United Kingdom' }
+  };
+
+  const ACTIVE = SITE_CONFIG[SITE] || SITE_CONFIG.US;
+  const AMAZON_DOMAIN = ACTIVE.domain;
+  const AFFILIATE_TAG = ACTIVE.tag;
+
+  document.getElementById('year').textContent = new Date().getFullYear();
+  document.getElementById('tagText').textContent = AFFILIATE_TAG + ' · ' + (ACTIVE.label || '');
+
+  // ========= DATA GENERATION =========
+  const CATEGORIES = [
+    'Electronics',
+    'Home',
+    'Kitchen',
+    'Outdoor',
+    'Audio & Video',
+    'Car',
+    'Office',
+    'Sports'
+  ];
+
+  const TITLE_TEMPLATES = {
+    'Electronics':'Everyday electronics for commute & home use',
+    'Home':'Home comfort & organisation essentials',
+    'Kitchen':'Practical tools to simplify cooking',
+    'Outdoor':'Gear for short trips & casual camping',
+    'Audio & Video':'Audio & video gear for everyday entertainment',
+    'Car':'Car accessories that improve daily driving',
+    'Office':'Tools that make working and studying easier',
+    'Sports':'Everyday fitness & body-care helpers'
+  };
+
+  function makeAsin(i){
+    // 默认生成 demo ASIN——稍后会用真实 ASIN 覆盖
+    return 'B0DEMO' + String(i).padStart(4,'0');
+  }
+
+  function makeTitle(i,cat){
+    return TITLE_TEMPLATES[cat] + ' · Pick ' + i;
+  }
+
+  function makePrice(i){
+    const base = 18 + (i % 45);
+    return (base + 0.99).toFixed(2);
+  }
+
+  // 使用 picsum 生成稳定图片（不会依赖 Unsplash）
+  function makeImg(category, index){
+    const map = {
+      'Electronics': 'electronics',
+      'Home': 'home',
+      'Kitchen': 'kitchen',
+      'Outdoor': 'outdoor',
+      'Audio & Video': 'audio',
+      'Car': 'car',
+      'Office': 'office',
+      'Sports': 'sports'
+    };
+    const key = map[category] || 'product';
+    return `https://picsum.photos/seed/${encodeURIComponent(key + '-' + index)}/600/400`;
+  }
+
+  function makeReview(product){
+    const cat = product.category;
+    const scene = {
+      'Electronics':'day-to-day commuting, working from home and light travel',
+      'Home':'bedrooms, living rooms and small apartments where comfort matters',
+      'Kitchen':'day-to-day meal prep, batch cooking and small family gatherings',
+      'Outdoor':'short trips, casual camping and basic emergency use',
+      'Audio & Video':'music, movie nights and background sound while working',
+      'Car':'daily commuting, school runs and longer weekend drives',
+      'Office':'working from home, office desk setups and focused study sessions',
+      'Sports':'everyday workouts, light training and basic recovery routines'
+    }[cat] || 'everyday usage scenarios';
+
+    const intro =
+`[Positioning]
+This product is aimed at people who need a practical solution for ${scene}. It is not designed to win spec charts or impress enthusiasts. Instead, it tries to strike a balance between “good enough performance”, “simple to use” and “reasonable cost”. For anyone who does not want to spend hours comparing dozens of similar items, it sits in that comfortable middle ground of “safe to try” rather than “risky experiment”.`;
+
+    const build =
+`[Design & build]
+Visually, it leans towards a simple, neutral look that blends into most homes and offices rather than standing out. Materials are typical of this price band: a mix of plastics and, in some cases, metal reinforcement at stress points. In hand, it does not feel ultra-premium, but it also avoids the creaks and rattles sometimes found in very cheap gear. You do not need to treat it like a fragile museum piece, but as with any everyday item, it still benefits from basic care.`;
+
+    const use =
+`[Functionality & everyday use]
+In day-to-day use, the most important questions are: is it easy to understand, and does it behave consistently? On both counts, this model performs well. Controls follow a sensible layout, and most people can get the core features running without reading the manual more than once. Over longer sessions it remains stable, with no dramatic drop-off in performance under normal conditions. Compared with more expensive, feature-packed models, it feels modest, but that simplicity is exactly what many mainstream users actually prefer.`;
+
+    const prosCons =
+`[Strengths & trade-offs]
+The main strengths are its value for money, its forgiving learning curve and the low maintenance requirements. It works reliably enough that you can mostly forget about it and focus on your actual task, whether that is cooking, working, driving or exercising. On the downside, demanding users may find that the feature set feels limited, and that fine-grained tuning options or high-end materials are missing. In other words, it is a solid everyday tool rather than an enthusiast’s showpiece.`;
+
+    const advice =
+`[Who should consider it?]
+Taken together, this product is best suited to people who want something that is dependable, easy to live with and does not require a big time or money investment. If you simply want your gear to “do its job” without a steep learning curve, it is a very reasonable option. If you already know you need specialised features, top-tier build or professional-grade performance, you should treat this as a reference baseline and compare it directly with higher-end alternatives before deciding.`;
+
+    return [intro, build, use, prosCons, advice].join('\n\n');
+  }
+
+  function makeSnippet(review){
+    return review.slice(0, 110) + '...';
+  }
+
+  const PRODUCTS = [];
+  for(let i=1;i<=100;i++){
+    const cat = CATEGORIES[(i-1) % CATEGORIES.length];
+    const asin = makeAsin(i);
+    const title = makeTitle(i,cat);
+    const price = makePrice(i);
+    const img = makeImg(cat, i);
+    const base = {id:i,asin,category:cat,title,price,img};
+    base.review = makeReview(base);
+    base.snippet = makeSnippet(base.review);
+    PRODUCTS.push(base);
+  }
+
+  // ========= PLACEHOLDER FOR REAL ASINS =========
+  // 你在这里填入 “真实 ASIN 列表”，就会自动变成 dp 链接
+  // 比如 US: ['B07FZ8S74R','B08N5WRWNW',...]
+  const REAL_ASINS_US = [
+    // TODO: paste your real US ASINs here, e.g.
+    // 'B07FZ8S74R','B08N5WRWNW', ...
+  ];
+
+  const REAL_ASINS_UK = [
+    // TODO: paste your real UK ASINs here (must exist on amazon.co.uk)
+    // 'B0XXXXXXX1','B0XXXXXXX2', ...
+  ];
+
+  if (SITE === 'US' && REAL_ASINS_US.length){
+    REAL_ASINS_US.forEach((asin, index) => {
+      if (PRODUCTS[index] && asin) PRODUCTS[index].asin = asin.trim();
+    });
+  }
+
+  if (SITE === 'UK' && REAL_ASINS_UK.length){
+    REAL_ASINS_UK.forEach((asin, index) => {
+      if (PRODUCTS[index] && asin) PRODUCTS[index].asin = asin.trim();
+    });
+  }
+
+  // ========= RENDERING =========
+  let currentList = PRODUCTS.slice();
+  let shown = 12;
+  const perPage = 12;
+
+  const gridEl = document.getElementById('productGrid');
+  const countEl = document.getElementById('countInfo');
+  const detailSection = document.getElementById('detailSection');
+  const detailInner = document.getElementById('detailInner');
+  const loadMoreBtn = document.getElementById('loadMoreBtn');
+
+  function affiliateUrl(product){
+    const asin = product.asin;
+    // 只要 asin 看起来是正常 ASIN（不是 B0DEMO 开头），就使用 dp 链接
+    if (asin && !asin.startsWith('B0DEMO')) {
+      return `https://www.amazon.${AMAZON_DOMAIN}/dp/${asin}/?tag=${AFFILIATE_TAG}`;
+    }
+    // 否则用搜索兜底，避免 404
+    const q = encodeURIComponent(product.category + ' ' + product.title);
+    return `https://www.amazon.${AMAZON_DOMAIN}/s?k=${q}&tag=${AFFILIATE_TAG}`;
+  }
+
+  function escapeHtml(str){
+    return String(str).replace(/[&<>"']/g, m=>(
+      {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]
+    ));
+  }
+
+  function renderGrid(){
+    const toShow = currentList.slice(0, shown);
+    countEl.textContent = `Showing ${toShow.length} of ${currentList.length} entries (100 total demo entries)`;
+    gridEl.innerHTML = toShow.map(p => `
+      <article class="card">
+        <div class="thumb">
+          <img src="${p.img}" alt="${escapeHtml(p.title)}" loading="lazy">
+        </div>
+        <div class="cat">${escapeHtml(p.category)} · ${p.asin.startsWith('B0DEMO') ? 'Demo entry' : 'Real product'} · ASIN: ${p.asin}</div>
+        <div class="title">${escapeHtml(p.title)}</div>
+        <div class="snippet">${escapeHtml(p.snippet)}</div>
+        <div class="meta">
+          <div class="price">Approx. $${p.price}</div>
+          <div class="btn-row">
+            <button class="btn btn-ghost" onclick="openDetail('${p.asin}')">Read review</button>
+            <a class="btn btn-primary" href="${affiliateUrl(p)}" target="_blank" rel="nofollow noopener">Go to Amazon</a>
+          </div>
+        </div>
+      </article>
+    `).join('');
+
+    loadMoreBtn.style.display = (shown >= currentList.length) ? 'none' : 'inline-block';
+  }
+
+  function openDetail(asin){
+    const p = PRODUCTS.find(x=>x.asin === asin);
+    if(!p) return;
+    detailInner.innerHTML = `
+      <div>
+        <img src="${p.img}" alt="${escapeHtml(p.title)}">
+      </div>
+      <div>
+        <div class="detail-title">${escapeHtml(p.title)}</div>
+        <div class="detail-meta">Category: ${escapeHtml(p.category)} · ${p.asin.startsWith('B0DEMO') ? 'Demo' : 'Real'} ASIN: ${p.asin} · approx. $${p.price}</div>
+        <div class="pill-row">
+          <span class="pill">Editorial-style summary</span>
+          <span class="pill">Structure demo for Amazon Associates</span>
+          <span class="pill">Best for: everyday users</span>
+        </div>
+        <div class="detail-body">
+          ${p.review.split('\\n\\n').map(par=>`<p>${escapeHtml(par)}</p>`).join('')}
+        </div>
+        <div class="detail-actions">
+          <a class="btn btn-primary" href="${affiliateUrl(p)}" target="_blank" rel="nofollow noopener">View on Amazon</a>
+          <button class="btn btn-ghost" onclick="closeDetail()">Close</button>
+        </div>
+      </div>
+    `;
+    detailSection.style.display = 'block';
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+
+  function closeDetail(){
+    detailSection.style.display = 'none';
+  }
+
+  function loadMore(){
+    shown = Math.min(currentList.length, shown + perPage);
+    renderGrid();
+  }
+
+  loadMoreBtn.addEventListener('click', loadMore);
+
+  // Category filter
+  const chips = document.querySelectorAll('.chip');
+  chips.forEach(ch => {
+    ch.addEventListener('click', ()=>{
+      chips.forEach(c=>c.classList.remove('active'));
+      ch.classList.add('active');
+      const cat = ch.getAttribute('data-cat');
+      if(cat === 'All'){
+        currentList = PRODUCTS.slice();
+      }else{
+        currentList = PRODUCTS.filter(p=>p.category === cat);
+      }
+      shown = Math.min(perPage,currentList.length);
+      detailSection.style.display = 'none';
+      renderGrid();
+    });
+  });
+
+  // Search
+  document.getElementById('searchBtn').addEventListener('click', ()=>{
+    const q = document.getElementById('searchInput').value.trim().toLowerCase();
+    doSearch(q);
+  });
+  document.getElementById('searchInput').addEventListener('keydown', e=>{
+    if(e.key === 'Enter'){
+      const q = e.target.value.trim().toLowerCase();
+      doSearch(q);
+    }
+  });
+
+  function doSearch(q){
+    if(!q){
+      currentList = PRODUCTS.slice();
+    }else{
+      currentList = PRODUCTS.filter(p=>{
+        const text = (p.title + ' ' + p.category + ' ' + p.review + ' ' + p.asin).toLowerCase();
+        return text.includes(q);
+      });
+    }
+    shown = Math.min(perPage,currentList.length);
+    detailSection.style.display = 'none';
+    renderGrid();
+  }
+
+  // init
+  renderGrid();
+  window.openDetail = openDetail;
+  window.closeDetail = closeDetail;
+</script>
+</body>
+</html>
