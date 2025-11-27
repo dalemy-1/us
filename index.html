@@ -6,77 +6,76 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="Editorial-style Amazon.com product shortlist with real ASIN links. Not affiliated with Amazon." />
   <style>
-    * {{ box-sizing: border-box; margin: 0; padding: 0; }}
-    html, body {{ font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #f3f4f7; color: #111827; }}
-    body {{ line-height: 1.5; }}
-    a {{ color: inherit; text-decoration: none; }}
-    .page-shell {{ max-width: 1200px; margin: 0 auto; padding: 24px 16px 40px; }}
-    header {{ margin-bottom: 24px; }}
-    .site-title {{ font-size: 22px; font-weight: 700; letter-spacing: .02em; margin-bottom: 4px; display:flex; align-items:center; gap:8px;}}
-    .site-subtitle {{ font-size: 13px; color: #6b7280; }}
-    nav {{ display: flex; justify-content: space-between; align-items: center; margin-top: 10px; font-size: 13px; color:#4b5563; flex-wrap:wrap; gap:8px;}}
-    .nav-left, .nav-right {{ display:flex; gap:12px; align-items:center; flex-wrap:wrap;}}
-    .nav-link {{ padding:4px 8px; border-radius:999px; transition:background .15s, color .15s;}}
-    .nav-link:hover {{ background:#e5e7eb; }}
-    .pill-muted {{ background:#e5e7eb; border-radius:999px; padding:2px 8px; font-size:12px; }}
-    main {{ display:grid; grid-template-columns: minmax(0,2fr) minmax(0,1.2fr); gap:20px; align-items:flex-start; margin-top:20px;}}
-    @media (max-width: 960px) {{ main {{ grid-template-columns: minmax(0,1fr); }} }}
-    .hero-card {{ background:#ffffff; border-radius:18px; padding:18px 18px 16px; box-shadow:0 22px 45px -28px rgba(15,23,42,.25); border:1px solid #e5e7eb;}}
-    .hero-title {{ font-size:20px; font-weight:650; margin-bottom:4px;}}
-    .hero-tagline {{ font-size:13px; color:#6b7280; margin-bottom:12px;}}
-    .hero-meta {{ font-size:11px; color:#9ca3af; margin-bottom:14px;}}
-    .chip-row {{ display:flex; flex-wrap:wrap; gap:6px; margin-bottom:12px;}}
-    .chip {{ padding:4px 10px; border-radius:999px; font-size:11px; border:1px solid #e5e7eb; background:#f9fafb; cursor:pointer; }}
-    .chip.active {{ background:#111827; color:#f9fafb; border-color:#111827;}}
-    .search-row {{ display:flex; gap:8px; margin-top:4px;}}
-    .search-row input {{ flex:1; padding:7px 10px; border-radius:999px; border:1px solid #d1d5db; font-size:12px; }}
-    .search-row button {{ padding:7px 14px; border-radius:999px; border:none; font-size:12px; cursor:pointer; background:#111827; color:#f9fafb; }}
-    .helper-card {{ background: radial-gradient(circle at top left, #111827 0, #020617 36%, #020617 100%); color:#e5e7eb; border-radius:18px; padding:18px 18px 20px; box-shadow:0 20px 50px -30px rgba(15,23,42,.7); border:1px solid rgba(148,163,184,.4);}}
-    .helper-title {{ font-size:15px; font-weight:600; margin-bottom:6px; display:flex; align-items:center; gap:6px;}}
-    .helper-sub {{ font-size:12px; color:#9ca3af; margin-bottom:10px;}}
-    .helper-list {{ font-size:12px; color:#e5e7eb; padding-left:16px;}}
-    .helper-list li {{ margin-bottom:4px;}}
-    .helper-footer {{ font-size:11px; color:#9ca3af; margin-top:10px;}}
-    .section-title-row {{ display:flex; justify-content:space-between; align-items:center; margin:26px 0 10px; font-size:13px;}}
-    .section-title-row h2 {{ font-size:16px; font-weight:600;}}
-    .section-meta {{ font-size:12px; color:#6b7280;}}
-    .product-grid {{ display:grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap:16px;}}
-    @media (max-width: 1024px) {{ .product-grid {{ grid-template-columns: repeat(2,minmax(0,1fr)); }} }}
-    @media (max-width: 720px) {{ .product-grid {{ grid-template-columns: minmax(0,1fr); }} }}
-    .product-card {{ background:#ffffff; border-radius:18px; overflow:hidden; border:1px solid #e5e7eb; display:flex; flex-direction:column; min-height:100%; box-shadow:0 14px 35px -24px rgba(15,23,42,.25);}}
-    .product-card_media {{ position:relative; padding:12px 12px 0;}}
-    .product-card_media img {{ width:100%; height:210px; object-fit:contain; border-radius:14px; background:#f9fafb;}}
-    .product-card_body {{ padding:10px 12px 12px; display:flex; flex-direction:column; gap:6px; flex:1; }}
-    .product-card_meta {{ font-size:10px; text-transform:uppercase; letter-spacing:.09em; color:#9ca3af;}}
-    .product-card_title {{ font-size:13px; font-weight:600; color:#111827; margin-bottom:1px;}}
-    .product-card_hook {{ font-size:12px; color:#4b5563;}}
-    .product-card_desc {{ font-size:11px; color:#6b7280;}}
-    .product-card_footer {{ padding:0 12px 11px; font-size:11px; color:#4b5563; display:flex; flex-direction:column; gap:6px;}}
-    .product-card_actions {{ display:flex; gap:8px; margin-top:4px;}}
-    .btn {{ display:inline-flex; align-items:center; justify-content:center; border-radius:999px; border:none; cursor:pointer; font-size:11px; padding:6px 11px; white-space:nowrap;}}
-    .btn-primary {{ background:#111827; color:#f9fafb;}}
-    .btn-primary:hover {{ background:#020617;}}
-    .btn-secondary {{ background:#f3f4f6; color:#111827; border:1px solid #e5e7eb;}}
-    .btn-secondary:hover {{ background:#e5e7eb;}}
-    .pill-count {{ font-size:11px; color:#6b7280;}}
-    .footer-grid {{ display:grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap:16px; margin-top:26px; font-size:13px;}}
-    @media (max-width: 900px) {{ .footer-grid {{ grid-template-columns:minmax(0,1fr); }} }}
-    .footer-card {{ background:#ffffff; border-radius:16px; padding:14px 16px 16px; border:1px solid #e5e7eb;}}
-    .footer-card h3 {{ font-size:14px; font-weight:600; margin-bottom:6px;}}
-    .footer-card p, .footer-card li {{ font-size:12px; color:#4b5563;}}
-    .footer-card ul {{ padding-left:18px; margin-top:6px;}}
-    .footer-card li {{ margin-bottom:4px;}}
-    .disclaimer-note {{ font-size:11px; color:#9ca3af; margin-top:8px;}}
-    .modal-backdrop {{ position:fixed; inset:0; background:rgba(15,23,42,.70); display:none; align-items:center; justify-content:center; z-index:40; backdrop-filter:blur(5px);}}
-    .modal-backdrop.active {{ display:flex;}}
-    .modal-dialog {{ background:#020617; color:#e5e7eb; max-width:520px; width:100%; border-radius:18px; padding:18px 18px 16px; box-shadow:0 30px 80px -40px rgba(15,23,42,.9); border:1px solid rgba(148,163,184,.45);}}
-    .modal-header {{ display:flex; justify-content:space-between; align-items:flex-start; gap:12px; margin-bottom:8px;}}
-    .modal-title {{ font-size:15px; font-weight:600;}}
-    .modal-close {{ border:none; background:transparent; color:#9ca3af; cursor:pointer; font-size:16px; line-height:1;}}
-    .modal-body {{ font-size:12px; color:#e5e7eb; max-height:260px; overflow-y:auto; white-space:pre-line;}}
-    .modal-footer {{ margin-top:10px; display:flex; justify-content:flex-end; gap:8px;}}
-    .modal-footer .btn-primary {{ background:#f97316; color:#111827;}}
-    .modal-footer .btn-primary:hover {{ background:#ea580c;}}
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #f3f4f7; color: #111827; }
+    body { line-height: 1.5; }
+    a { color: inherit; text-decoration: none; }
+    .page-shell { max-width: 1200px; margin: 0 auto; padding: 24px 16px 40px; }
+    header { margin-bottom: 24px; }
+    .site-title { font-size: 22px; font-weight: 700; letter-spacing: .02em; margin-bottom: 4px; display:flex; align-items:center; gap:8px;}
+    .site-subtitle { font-size: 13px; color: #6b7280; }
+    nav { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; font-size: 13px; color:#4b5563; flex-wrap:wrap; gap:8px;}
+    .nav-left, .nav-right { display:flex; gap:12px; align-items:center; flex-wrap:wrap;}
+    .nav-link { padding:4px 8px; border-radius:999px; transition:background .15s, color .15s;}
+    .nav-link:hover { background:#e5e7eb; }
+    .pill-muted { background:#e5e7eb; border-radius:999px; padding:2px 8px; font-size:12px; }
+    main { display:grid; grid-template-columns: minmax(0,2fr) minmax(0,1.2fr); gap:20px; align-items:flex-start; margin-top:20px;}
+    @media (max-width: 960px) { main { grid-template-columns: minmax(0,1fr); } }
+    .hero-card { background:#ffffff; border-radius:18px; padding:18px 18px 16px; box-shadow:0 22px 45px -28px rgba(15,23,42,.25); border:1px solid #e5e7eb;}
+    .hero-title { font-size:20px; font-weight:650; margin-bottom:4px;}
+    .hero-tagline { font-size:13px; color:#6b7280; margin-bottom:12px;}
+    .hero-meta { font-size:13px; color:#6b7280; margin-bottom:14px;}
+    .chip-row { display:flex; flex-wrap:wrap; gap:6px; margin-bottom:12px; margin-top:4px;}
+    .chip { padding:4px 10px; border-radius:999px; font-size:11px; border:1px solid #e5e7eb; background:#f9fafb; cursor:pointer; }
+    .chip.active { background:#111827; color:#f9fafb; border-color:#111827;}
+    .search-row { display:flex; gap:8px; margin-top:4px;}
+    .search-row input { flex:1; padding:7px 10px; border-radius:999px; border:1px solid #d1d5db; font-size:12px; }
+    .search-row button { padding:7px 14px; border-radius:999px; border:none; font-size:12px; cursor:pointer; background:#111827; color:#f9fafb; }
+    .helper-card { background: radial-gradient(circle at top left, #111827 0, #020617 36%, #020617 100%); color:#e5e7eb; border-radius:18px; padding:18px 18px 20px; box-shadow:0 20px 50px -30px rgba(15,23,42,.7); border:1px solid rgba(148,163,184,.4);}
+    .helper-title { font-size:15px; font-weight:600; margin-bottom:6px; display:flex; align-items:center; gap:6px;}
+    .helper-sub { font-size:12px; color:#9ca3af; margin-bottom:10px;}
+    .helper-list { font-size:12px; color:#e5e7eb; padding-left:16px;}
+    .helper-list li { margin-bottom:4px;}
+    .helper-footer { font-size:11px; color:#9ca3af; margin-top:10px;}
+    .section-title-row { display:flex; justify-content:space-between; align-items:center; margin:26px 0 10px; font-size:13px;}
+    .section-title-row h2 { font-size:16px; font-weight:600;}
+    .section-meta { font-size:12px; color:#6b7280;}
+    .product-grid { display:grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap:16px;}
+    @media (max-width: 1024px) { .product-grid { grid-template-columns: repeat(2,minmax(0,1fr)); } }
+    @media (max-width: 720px) { .product-grid { grid-template-columns: minmax(0,1fr); } }
+    .product-card { background:#ffffff; border-radius:18px; overflow:hidden; border:1px solid #e5e7eb; display:flex; flex-direction:column; min-height:100%; box-shadow:0 14px 35px -24px rgba(15,23,42,.25);}
+    .product-card_media { position:relative; padding:12px 12px 0;}
+    .product-card_media img { width:100%; height:210px; object-fit:contain; border-radius:14px; background:#f9fafb;}
+    .product-card_body { padding:10px 12px 12px; display:flex; flex-direction:column; gap:6px; flex:1; }
+    .product-card_meta { font-size:10px; text-transform:uppercase; letter-spacing:.09em; color:#9ca3af;}
+    .product-card_title { font-size:13px; font-weight:600; color:#111827; margin-bottom:1px;}
+    .product-card_hook { font-size:12px; color:#4b5563;}
+    .product-card_desc { font-size:11px; color:#6b7280;}
+    .product-card_footer { padding:0 12px 11px; font-size:11px; color:#4b5563; display:flex; flex-direction:column; gap:6px;}
+    .product-card_actions { display:flex; gap:8px; margin-top:4px;}
+    .btn { display:inline-flex; align-items:center; justify-content:center; border-radius:999px; border:none; cursor:pointer; font-size:11px; padding:6px 11px; white-space:nowrap;}
+    .btn-primary { background:#111827; color:#f9fafb;}
+    .btn-primary:hover { background:#020617;}
+    .btn-secondary { background:#f3f4f6; color:#111827; border:1px solid #e5e7eb;}
+    .btn-secondary:hover { background:#e5e7eb;}
+    .footer-grid { display:grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap:16px; margin-top:26px; font-size:13px;}
+    @media (max-width: 900px) { .footer-grid { grid-template-columns:minmax(0,1fr); } }
+    .footer-card { background:#ffffff; border-radius:16px; padding:14px 16px 16px; border:1px solid #e5e7eb;}
+    .footer-card h3 { font-size:14px; font-weight:600; margin-bottom:6px;}
+    .footer-card p, .footer-card li { font-size:12px; color:#4b5563;}
+    .footer-card ul { padding-left:18px; margin-top:6px;}
+    .footer-card li { margin-bottom:4px;}
+    .disclaimer-note { font-size:11px; color:#9ca3af; margin-top:8px;}
+    .modal-backdrop { position:fixed; inset:0; background:rgba(15,23,42,.70); display:none; align-items:center; justify-content:center; z-index:40; backdrop-filter:blur(5px);}
+    .modal-backdrop.active { display:flex;}
+    .modal-dialog { background:#020617; color:#e5e7eb; max-width:520px; width:100%; border-radius:18px; padding:18px 18px 16px; box-shadow:0 30px 80px -40px rgba(15,23,42,.9); border:1px solid rgba(148,163,184,.45);}
+    .modal-header { display:flex; justify-content:space-between; align-items:flex-start; gap:12px; margin-bottom:8px;}
+    .modal-title { font-size:15px; font-weight:600;}
+    .modal-close { border:none; background:transparent; color:#9ca3af; cursor:pointer; font-size:16px; line-height:1;}
+    .modal-body { font-size:12px; color:#e5e7eb; max-height:260px; overflow-y:auto; white-space:pre-line;}
+    .modal-footer { margin-top:10px; display:flex; justify-content:flex-end; gap:8px;}
+    .modal-footer .btn-primary { background:#f97316; color:#111827;}
+    .modal-footer .btn-primary:hover { background:#ea580c;}
   </style>
 </head>
 <body>
@@ -169,7 +168,7 @@
       <article id="privacy" class="footer-card">
         <h3>Privacy &amp; data</h3>
         <p>
-          This site does not collect payment details or process orders. All transactions take place on Amazon.com or other third‑party
+          This site does not collect payment details or process orders. All transactions take place on Amazon.com or other third-party
           sites after you click through an external link. Basic traffic analytics may be used to understand anonymous page usage such as
           page views and clicks.
         </p>
@@ -186,12 +185,12 @@
           through links marked as Amazon affiliate links, at no additional cost to you.
         </p>
         <p style="margin-top:8px;">
-          Product selection and editorial notes are created independently and are not endorsed or pre‑approved by Amazon. Prices,
+          Product selection and editorial notes are created independently and are not endorsed or pre-approved by Amazon. Prices,
           availability and promotional offers can change at any time, and only the information shown on Amazon.com at the moment of your
           visit is considered current.
         </p>
         <p class="disclaimer-note">
-          Always double‑check the live details on Amazon, including full specifications, customer reviews and the latest price, before
+          Always double-check the live details on Amazon, including full specifications, customer reviews and the latest price, before
           you complete your purchase.
         </p>
       </article>
@@ -213,7 +212,7 @@
   </div>
 
   <script>
-    const CATEGORY_MAP = {{
+    const CATEGORY_MAP = {
       "Electronics": "Electronics & Gadgets",
       "Home": "Home & Kitchen",
       "Kitchen": "Home & Kitchen",
@@ -222,7 +221,7 @@
       "Car": "Car Accessories",
       "Office": "Office & Daily Use",
       "Other": "Office & Daily Use"
-    }};
+    };
 
 const rawProducts = [
   {
@@ -745,19 +744,19 @@ const rawProducts = [
       details: "Use this shortlist as a quick way to spot products that may deserve a closer look on Amazon. The editorial note here is intentionally simple so that it never conflicts with the full details, specifications, sizing information or customer reviews on the official product page.",
       approxPriceLabel: "Check live price on Amazon.com for the latest price and availability.",
       amazonUrl: `https://www.amazon.com/dp/${p.asin}?tag=us1987-20`,
-      reviewText: (function() {{
+      reviewText: (function() {
         const intro = `This is a curated pick for the “${CATEGORY_MAP[p.category] || "General"}” category on Amazon.com.
 
 `;
-        const block1 = "It is intended as a balanced everyday choice rather than an extreme high‑end or ultra‑budget option. In most cases the focus is on ease of use, setup that does not require special tools, and day‑to‑day reliability.
+        const block1 = "It is intended as a balanced everyday choice rather than an extreme high-end or ultra-budget option. In most cases the focus is on ease of use, setup that does not require special tools, and day-to-day reliability.
 
 ";
-        const block2 = "Because product details, colour options and bundles can change over time, please always treat this summary as a high‑level note only. For exact specifications, compatibility notes, safety information and full customer feedback, open the live product page on Amazon.com.
+        const block2 = "Because product details, colour options and bundles can change over time, please always treat this summary as a high-level note only. For exact specifications, compatibility notes, safety information and full customer feedback, open the live product page on Amazon.com.
 
 ";
         const block3 = `ASIN: ${p.asin} · Marketplace: Amazon.com`;
         return intro + block1 + block2 + block3;
-      }})()
+      })()
     }));
 
     const ALL_CATEGORY_LABEL = "All categories";
@@ -777,41 +776,41 @@ const rawProducts = [
     const categoryLabels = [ALL_CATEGORY_LABEL, ...Array.from(new Set(products.map(p => p.categoryLabel)))];
     let activeCategory = ALL_CATEGORY_LABEL;
 
-    function renderCategoryChips() {{
+    function renderCategoryChips() {
       chipsRow.innerHTML = "";
-      categoryLabels.forEach(label => {{
+      categoryLabels.forEach(label => {
         const chip = document.createElement("button");
         chip.type = "button";
         chip.textContent = label === ALL_CATEGORY_LABEL ? "All picks" : label;
         chip.className = "chip" + (label === activeCategory ? " active" : "");
-        chip.addEventListener("click", () => {{
+        chip.addEventListener("click", () => {
           activeCategory = label;
           const term = searchInput.value.trim().toLowerCase();
           const filtered = filterProducts(term);
           renderProducts(filtered);
           renderCategoryChips();
-        }});
+        });
         chipsRow.appendChild(chip);
-      }});
-    }}
+      });
+    }
 
-    function filterProducts(term) {{
+    function filterProducts(term) {
       const byCategory = products.filter(p => activeCategory === ALL_CATEGORY_LABEL || p.categoryLabel === activeCategory);
       if (!term) return byCategory;
-      return byCategory.filter(p => {{
+      return byCategory.filter(p => {
         const hay = (p.title + " " + p.categoryLabel + " " + p.asin).toLowerCase();
         return hay.includes(term);
-      }});
-    }}
+      });
+    }
 
-    function renderProducts(list) {{
+    function renderProducts(list) {
       gridEl.innerHTML = "";
-      if (!list.length) {{
+      if (!list.length) {
         gridEl.innerHTML = "<p style='font-size:13px;color:#6b7280;'>No products match the current filters. Try clearing the search or choosing “All picks”.</p>";
         if (countEl) countEl.textContent = "0 of " + products.length;
         return;
-      }}
-      list.forEach((p) => {{
+      }
+      list.forEach((p) => {
         const card = document.createElement("article");
         card.className = "product-card";
         card.innerHTML = `
@@ -839,42 +838,42 @@ const rawProducts = [
         const reviewBtn = card.querySelector(".js-review");
         reviewBtn.addEventListener("click", () => openReviewModal(p));
         gridEl.appendChild(card);
-      }});
+      });
       if (countEl) countEl.textContent = list.length + " of " + products.length;
-    }}
+    }
 
-    function openReviewModal(product) {{
+    function openReviewModal(product) {
       modalTitle.textContent = product.title + " · Selected item from Amazon.com";
       modalBody.textContent = product.reviewText;
       modalAmazonLink.href = product.amazonUrl;
       modalBackdrop.classList.add("active");
-    }}
+    }
 
-    function closeReviewModal() {{
+    function closeReviewModal() {
       modalBackdrop.classList.remove("active");
-    }}
+    }
 
     modalCloseBtn.addEventListener("click", closeReviewModal);
     modalCancelBtn.addEventListener("click", closeReviewModal);
-    modalBackdrop.addEventListener("click", (ev) => {{
+    modalBackdrop.addEventListener("click", (ev) => {
       if (ev.target === modalBackdrop) closeReviewModal();
-    }});
-    document.addEventListener("keydown", (ev) => {{
+    });
+    document.addEventListener("keydown", (ev) => {
       if (ev.key === "Escape") closeReviewModal();
-    }});
+    });
 
-    searchBtn.addEventListener("click", () => {{
+    searchBtn.addEventListener("click", () => {
       const term = searchInput.value.trim().toLowerCase();
       const filtered = filterProducts(term);
       renderProducts(filtered);
-    }});
-    searchInput.addEventListener("keydown", (ev) => {{
-      if (ev.key === "Enter") {{
+    });
+    searchInput.addEventListener("keydown", (ev) => {
+      if (ev.key === "Enter") {
         const term = searchInput.value.trim().toLowerCase();
         const filtered = filterProducts(term);
         renderProducts(filtered);
-      }}
-    }});
+      }
+    });
 
     renderCategoryChips();
     renderProducts(products);
