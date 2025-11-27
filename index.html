@@ -736,30 +736,30 @@ const rawProducts = [
   }
 ];
 
-    const products = rawProducts.map((p) => ({
-      ...p,
-      categoryLabel: CATEGORY_MAP[p.category] || "Electronics & Gadgets",
-      title: `Product #${p.id} – ${(CATEGORY_MAP[p.category] || "Electronics & Gadgets")} Pick`,
-      hook: "This pick is designed as a practical option in this broad category, focusing on everyday ease of use, straightforward setup and balanced value for typical home use.",
-      details: "Use this shortlist as a quick way to spot products that may deserve a closer look on Amazon. The editorial note here is intentionally simple so that it never conflicts with the full details, specifications, sizing information or customer reviews on the official product page.",
-      approxPriceLabel: "Check live price on Amazon.com for the latest price and availability.",
-      amazonUrl: `https://www.amazon.com/dp/${p.asin}?tag=us1987-20`,
-      reviewText: (function() {
-        const intro = `This is a curated pick for the “${CATEGORY_MAP[p.category] || "General"}” category on Amazon.com.
+    
+const products = rawProducts.map(function(p) {
+      var catLabel = CATEGORY_MAP[p.category] || "Electronics & Gadgets";
+      return {
+        id: p.id,
+        asin: p.asin,
+        category: p.category,
+        image: p.image,
+        categoryLabel: catLabel,
+        title: "Product #" + p.id + " – " + catLabel + " Pick",
+        hook: "This pick is designed as a practical option in this broad category, focusing on everyday ease of use, straightforward setup and balanced value for typical home use.",
+        details: "Use this shortlist as a quick way to spot products that may deserve a closer look on Amazon. The editorial note here is intentionally simple so that it never conflicts with the full details, specifications, sizing information or customer reviews on the official product page.",
+        approxPriceLabel: "Check live price on Amazon.com for the latest price and availability.",
+        amazonUrl: "https://www.amazon.com/dp/" + p.asin + "?tag=us1987-20",
+        reviewText: (
+          "This is a curated pick for the \"" + catLabel + "\" category on Amazon.com.\n\n" +
+          "It is intended as a balanced everyday choice rather than an extreme high-end or ultra-budget option. In most cases the focus is on ease of use, setup that does not require special tools, and day-to-day reliability.\n\n" +
+          "Because product details, colour options and bundles can change over time, please always treat this summary as a high-level note only. For exact specifications, compatibility notes, safety information and full customer feedback, open the live product page on Amazon.com.\n\n" +
+          "ASIN: " + p.asin + " · Marketplace: Amazon.com"
+        )
+      };
+    });
 
-`;
-        const block1 = "It is intended as a balanced everyday choice rather than an extreme high-end or ultra-budget option. In most cases the focus is on ease of use, setup that does not require special tools, and day-to-day reliability.
-
-";
-        const block2 = "Because product details, colour options and bundles can change over time, please always treat this summary as a high-level note only. For exact specifications, compatibility notes, safety information and full customer feedback, open the live product page on Amazon.com.
-
-";
-        const block3 = `ASIN: ${p.asin} · Marketplace: Amazon.com`;
-        return intro + block1 + block2 + block3;
-      })()
-    }));
-
-    const ALL_CATEGORY_LABEL = "All categories";
+const ALL_CATEGORY_LABEL = "All categories";
     const gridEl = document.getElementById("product-grid");
     const countEl = document.getElementById("product-count");
     const searchInput = document.getElementById("search-input");
