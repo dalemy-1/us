@@ -503,7 +503,7 @@ background-size: cover;
         <p>
           This page uses real product ASINs and editorial-style summaries,
           displayed in a grid that is designed to be friendly for standard affiliate programs.
-          Each card leads directly to the matching product page on the retailer site with the
+          Each card leads directly to the matching product page on the Amazon.com with the
           affiliate tag applied.
         </p>
         <div class="meta-row">
@@ -530,9 +530,9 @@ background-size: cover;
         <h2>How to use this shortlist</h2>
         <p>
           Each product card gives you a short editorial-style note plus a direct
-          link to the live product page on the retailer site. Treat this page as a curated
+          link to the live product page on the Amazon.com. Treat this page as a curated
           shortlist, not a replacement for reading the full details and reviews
-          on the retailer site.
+          on the Amazon.com.
         </p>
         <ul>
           <li>
@@ -553,7 +553,7 @@ background-size: cover;
         </ul>
         <p>
           Final pricing, availability and review scores are always determined by
-          the retailer site on their own pages.
+          the Amazon.com on their own pages.
         </p>
       </aside>
     </section>
@@ -610,7 +610,7 @@ background-size: cover;
         <p>
           Each card on this page is written to help you think about those questions
           so you can quickly decide whether a product might be a “good-enough fit”
-          before opening the full details on the retailer site.
+          before opening the full details on the Amazon.com.
         </p>
       </article>
 
@@ -623,8 +623,8 @@ background-size: cover;
           picks rather than chasing only the newest or most expensive models.
         </p>
         <p>
-          We do not claim that any single item here is objectively the “best”
-          choice for everyone. Instead, each entry is a snapshot of a product that
+          We do not claim that any item here is universally recommended for all shoppers.
+          Instead, each entry is a snapshot of a product that
           could be a reasonable option for US shoppers when matched to the
           right person and budget.
         </p>
@@ -634,14 +634,14 @@ background-size: cover;
         <h3>Privacy &amp; data</h3>
         <p>
           This site does not collect payment details or process orders. All
-          transactions take place on the retailer site or other third-party sites after
+          transactions take place on the Amazon.com or other third-party sites after
           you click through an external link.
         </p>
         <p>
           Basic traffic analytics may be used to understand anonymous page usage
           such as page views and clicks. For the latest information on how your
           data is handled, please always check the privacy policy and terms of use
-          on the retailer site.
+          on the Amazon.com.
         </p>
       </article>
 
@@ -657,7 +657,7 @@ background-size: cover;
           Product selection and editorial notes are created independently and are
           not endorsed or pre-approved by Amazon. Prices, availability and
           promotional offers can change at any time; only the information shown on
-          the retailer site at the moment of your visit is considered current.
+          the Amazon.com at the moment of your visit is considered current.
         </p>
       </article>
     </section>
@@ -804,16 +804,16 @@ background-size: cover;
       const hook =
         `This pick is designed as a practical option in the ${broadCat.toLowerCase()} space for US shoppers, balancing everyday performance and value.`;
       const details =
-        "Use this shortlist as a quick way to spot products that may deserve a closer look on the retailer's product page. Each card focuses on simple fit, features and everyday everyday US use rather than chasing extreme specs.";
-      const approxPriceLabel = "Check live price on the retailer site";
+        "Use this shortlist as a quick way to spot products that may deserve a closer look on the retailer's product page. Each card focuses on simple fit, features and everyday US use rather than chasing extreme specs.";
+      const approxPriceLabel = "Check live price on the Amazon.com";
       const amazonUrl = `https://${AMAZON_DOMAIN}/dp/${p.asin}/?tag=${AFFILIATE_TAG}`;
       const reviewText =
         `${title}\n\n` +
         `This US-focused editorial note highlights key reasons why this item might be a good fit:\n` +
         `• Everyday use: aimed at typical home or personal use rather than specialist scenarios.\n` +
         `• Effort vs. benefit: chosen where setup, maintenance and day-to-day use feel reasonable for most people.\n` +
-        `• Value: not always the absolute cheapest, but offering a sensible balance of features for the price.\n\n` +
-        `Always open the full product page on the retailer site to check the latest details, compatibility notes and customer reviews before you decide.`;
+        `• Value: not focused on being the cheapest, but instead offering a balanced feature set of features for the price.\n\n` +
+        `Always open the full product page on the Amazon.com to check the latest details, compatibility notes and customer reviews before you decide.`;
       return {
         ...p,
         broadCategory: broadCat,
@@ -932,10 +932,7 @@ background-size: cover;
     });
 
     function openReviewModal(product) {
-      modalTitle.textContent = product.title.replace(
-        "Pick",
-        "– Selected item from this shortlist"
-      );
+      modalTitle.textContent = product.title + " (Short review)";
       modalBody.textContent = product.reviewText;
       modalAmazonLink.href = product.amazonUrl;
       modalBackdrop.classList.add("visible");
