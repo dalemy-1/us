@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta
     name="description"
-    content="Editorial-style Amazon.com product reviews & buying advice with real ASIN links. Not affiliated with Amazon."
+    content="Independent product reviews & buying advice with real ASIN links. Editorial content only; not endorsed by any retailer."
   />
   <style>
     :root {
@@ -471,9 +471,9 @@
       <div class="brand-block">
         <div class="site-title">US Deep Review • Smart Picks US</div>
         <div class="site-subtitle">
-          <span>Editorial-style Amazon.com product reviews &amp; buying advice</span>
+          <span>Independent product reviews &amp; buying advice for everyday shopping</span>
           <span class="dot"></span>
-          <span>Not affiliated with Amazon.</span>
+          <span>Independent editorial content. Not endorsed by any retailer.</span>
         </div>
       </div>
       <div class="top-nav">
@@ -494,15 +494,15 @@
   <main>
     <section class="intro-layout">
       <article class="card">
-        <h1>Amazon.com product cards with real ASIN links.</h1>
+        <h1>Curated product picks with real ASIN links.</h1>
         <p>
           As an Amazon Associate I earn from qualifying purchases.
           Some links on this page are affiliate links.
         </p>
         <p>
-          This page uses real Amazon.com ASINs and editorial-style summaries,
-          displayed in a grid that is designed to be friendly for Amazon Associates.
-          Each card leads directly to the matching product page on Amazon.com with the
+          This page uses real product ASINs and editorial-style summaries,
+          displayed in a grid that is designed to be friendly for standard affiliate programs.
+          Each card leads directly to the matching product page on the retailer site with the
           affiliate tag applied.
         </p>
         <div class="meta-row">
@@ -529,9 +529,9 @@
         <h2>How to use this shortlist</h2>
         <p>
           Each product card gives you a short editorial-style note plus a direct
-          link to the live Amazon.com product page. Treat this page as a curated
+          link to the live product page on the retailer site. Treat this page as a curated
           shortlist, not a replacement for reading the full details and reviews
-          on Amazon.
+          on the retailer site.
         </p>
         <ul>
           <li>
@@ -546,13 +546,13 @@
             style note.
           </li>
           <li>
-            Click <strong>"Go to Amazon"</strong> to see full details, current
+            Click <strong>"View details"</strong> to see full details, current
             pricing and customer reviews.
           </li>
         </ul>
         <p>
           Final pricing, availability and review scores are always determined by
-          Amazon.com on their own pages.
+          the retailer site on their own pages.
         </p>
       </aside>
     </section>
@@ -609,16 +609,16 @@
         <p>
           Each card on this page is written to help you think about those questions
           so you can quickly decide whether a product might be a “good-enough fit”
-          before opening the full details on Amazon.
+          before opening the full details on the retailer site.
         </p>
       </article>
 
       <article class="card info-card">
-        <h3>About this DE shortlist</h3>
+        <h3>About this US shortlist</h3>
         <p>
-          All products on this page are selected from Amazon.com using publicly
+          All products on this page are selected from a large online retailer using publicly
           available information such as product descriptions, feature lists and
-          typical German usage scenarios. The focus is on clear, balanced everyday
+          typical US usage scenarios. The focus is on clear, balanced everyday
           picks rather than chasing only the newest or most expensive models.
         </p>
         <p>
@@ -633,21 +633,21 @@
         <h3>Privacy &amp; data</h3>
         <p>
           This site does not collect payment details or process orders. All
-          transactions take place on Amazon.com or other third-party sites after
+          transactions take place on the retailer site or other third-party sites after
           you click through an external link.
         </p>
         <p>
           Basic traffic analytics may be used to understand anonymous page usage
           such as page views and clicks. For the latest information on how your
           data is handled, please always check the privacy policy and terms of use
-          on Amazon.com.
+          on the retailer site.
         </p>
       </article>
 
       <article class="card info-card">
         <h3>Affiliate disclosure</h3>
         <p>
-          Deep Review • Smart Picks DE participates in the Amazon Associates
+          Deep Review • Smart Picks US participates in the Amazon Associates
           Program. This means that we may earn a small commission on qualifying
           purchases made through links marked as Amazon affiliate links, at no
           additional cost to you.
@@ -656,7 +656,7 @@
           Product selection and editorial notes are created independently and are
           not endorsed or pre-approved by Amazon. Prices, availability and
           promotional offers can change at any time; only the information shown on
-          Amazon.com at the moment of your visit is considered current.
+          the retailer site at the moment of your visit is considered current.
         </p>
       </article>
     </section>
@@ -678,7 +678,7 @@
           class="btn btn-primary"
           id="reviewModalAmazonLink"
         >
-          Go to Amazon
+          View details
         </a>
       </div>
     </div>
@@ -803,8 +803,8 @@
       const hook =
         `This pick is designed as a practical option in the ${broadCat.toLowerCase()} space for US shoppers, balancing everyday performance and value.`;
       const details =
-        "Use this shortlist as a quick way to spot products that may deserve a closer look on Amazon.com. Each card focuses on simple fit, features and everyday everyday US use rather than chasing extreme specs.";
-      const approxPriceLabel = "Check live price on Amazon.com";
+        "Use this shortlist as a quick way to spot products that may deserve a closer look on the retailer's product page. Each card focuses on simple fit, features and everyday everyday US use rather than chasing extreme specs.";
+      const approxPriceLabel = "Check live price on the retailer site";
       const amazonUrl = `https://${AMAZON_DOMAIN}/dp/${p.asin}/?tag=${AFFILIATE_TAG}`;
       const reviewText =
         `${title}\n\n` +
@@ -812,7 +812,7 @@
         `• Everyday use: aimed at typical home or personal use rather than specialist scenarios.\n` +
         `• Effort vs. benefit: chosen where setup, maintenance and day-to-day use feel reasonable for most people.\n` +
         `• Value: not always the absolute cheapest, but offering a sensible balance of features for the price.\n\n` +
-        `Always open the full Amazon.com product page to check the latest details, compatibility notes and customer reviews before you decide.`;
+        `Always open the full product page on the retailer site to check the latest details, compatibility notes and customer reviews before you decide.`;
       return {
         ...p,
         broadCategory: broadCat,
@@ -870,7 +870,7 @@
                   Read review
                 </button>
                 <a class="btn btn-primary" href="${p.amazonUrl}" target="_blank" rel="nofollow noopener sponsored">
-                  Go to Amazon
+                  View details
                 </a>
               </div>
             </div>
@@ -933,7 +933,7 @@
     function openReviewModal(product) {
       modalTitle.textContent = product.title.replace(
         "Pick",
-        "– Selected item from Amazon.com"
+        "– Selected item from this shortlist"
       );
       modalBody.textContent = product.reviewText;
       modalAmazonLink.href = product.amazonUrl;
