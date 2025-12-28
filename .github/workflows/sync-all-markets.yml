@@ -1,0 +1,124 @@
+name: Sync ALL Markets CSV
+
+on:
+  workflow_dispatch:
+  schedule:
+    # 建议 15 分钟一次（稳定）
+    - cron: "*/15 * * * *"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sync-all-markets
+  cancel-in-progress: true
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download master CSV
+        run: |
+          set -euo pipefail
+          URL="http://154.48.226.95:5001/admin/Product/export_csv"
+          OUT="_all.csv"
+
+          curl -L --fail --retry 3 --retry-delay 2 \
+            --connect-timeout 15 --max-time 90 \
+            -H "Accept: text/csv,*/*;q=0.9" \
+            -H "User-Agent: Mozilla/5.0 (GitHub Actions)" \
+            "$URL" -o "$OUT"
+
+          # 非空校验
+          test -s "$OUT"
+
+          # 防止拿到 HTML（风控/错误页）
+          if head -n 2 "$OUT" | grep -qiE "<!doctype html|<html"; then
+            echo "ERROR: downloaded content looks like HTML, not CSV."
+            exit 1
+          fi
+
+      - name: Split CSV by market
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import csv, os
+          from collections import defaultdict
+
+          SRC = "_all.csv"
+          MARKETS = ["US","UK","DE","FR","IT","ES","CA","JP"]
+          OUT_MAP = {m: f"{m.lower()}.csv" for m in MARKETS}
+
+          def norm(s): return (s or "").strip()
+
+          with open(SRC, "r", encoding="utf-8-sig", newline="") as f:
+            reader = csv.DictReader(f)
+            if not reader.fieldnames:
+              raise SystemExit("ERROR: CSV has no header")
+
+            # 必需字段检查（最少保证 market/asin/image_url/link/status 可用）
+            required = {"market","asin","image_url","link"}
+            fields = {h.strip().lower() for h in reader.fieldnames}
+            missing = [x for x in required if x not in fields]
+            if missing:
+              raise SystemExit(f"ERROR: CSV missing required columns: {missing}")
+
+            rows_by_market = defaultdict(list)
+            for row in reader:
+              m = norm(row.get("market") or row.get("Market") or row.get("MARKET")).upper()
+              if m in OUT_MAP:
+                rows_by_market[m].append(row)
+
+          # 写出：每个文件都保留同样的表头（保持前端解析稳定）
+          header = None
+          with open(SRC, "r", encoding="utf-8-sig", newline="") as f:
+            r = csv.reader(f)
+            header = next(r)
+
+          for m in MARKETS:
+            out = OUT_MAP[m]
+            rows = rows_by_market.get(m, [])
+            with open(out, "w", encoding="utf-8", newline="") as wf:
+              w = csv.writer(wf)
+              w.writerow(header)
+              if rows:
+                # 为了严格按原表头顺序输出
+                for row in rows:
+                  w.writerow([row.get(col, "") for col in header])
+
+            # 额外：避免 0 行导致“看起来像失败”，但允许为空（只是该市场暂无产品）
+            # 你若想强制必须有数据，可在这里加：if m=="US" and not rows: raise ...
+          print("Split done:", ", ".join([OUT_MAP[m] for m in MARKETS]))
+          PY
+
+      - name: Show output stats
+        run: |
+          set -euo pipefail
+          for f in us.csv uk.csv de.csv fr.csv it.csv es.csv ca.csv jp.csv; do
+            echo "---- $f ----"
+            wc -l "$f" || true
+            head -n 2 "$f" || true
+          done
+
+      - name: Commit & Push if changed
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          git add us.csv uk.csv de.csv fr.csv it.csv es.csv ca.csv jp.csv
+
+          if git diff --cached --quiet; then
+            echo "No changes, skip commit."
+            exit 0
+          fi
+
+          git commit -m "Update market CSVs"
+          git push
