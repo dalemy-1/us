@@ -688,7 +688,7 @@ background-size: cover;
   <script>
     const AMAZON_DOMAIN = "www.amazon.com";
     const AFFILIATE_TAG = "us1987-20";
-    const CSV_EXPORT_URL = "http://154.48.226.95:5001/admin/Product/export_csv";
+    const DEFAULT_CSV_EXPORT_URL = "http://154.48.226.95:5001/admin/Product/export_csv";
     const AUTO_REFRESH_MINUTES = 15;
     const TARGET_MARKET = "US";
 
@@ -836,6 +836,24 @@ background-size: cover;
       if (e.key === "Escape") closeReviewModal();
     });
 
+    function resolveCsvUrl() {
+      const urlParam = new URLSearchParams(window.location.search).get("csv");
+      const htmlUrl = document.documentElement.dataset.csvUrl;
+      const chosen = window.CSV_EXPORT_URL || urlParam || htmlUrl || DEFAULT_CSV_EXPORT_URL;
+      try {
+        const resolved = new URL(chosen, window.location.href);
+        if (window.location.protocol === "https:" && resolved.protocol === "http:") {
+          if (resolved.hostname === window.location.hostname) {
+            return resolved.pathname + resolved.search;
+          }
+          resolved.protocol = "https:";
+        }
+        return resolved.toString();
+      } catch (error) {
+        return DEFAULT_CSV_EXPORT_URL;
+      }
+    }
+
     function parseCsv(text) {
       const sanitized = text.replace(/^\uFEFF/, "");
       const delimiterCandidates = [",", ";", "\t", "|"];
@@ -880,7 +898,11 @@ background-size: cover;
     function buildRowMap(headers, row) {
       const map = {};
       headers.forEach((header, index) => {
-        map[header] = row[index] ? row[index].trim() : "";
+        const value = row[index] ? row[index].trim() : "";
+        map[header] = value;
+        if (header) {
+          map[header.toLowerCase()] = value;
+        }
       });
       return map;
     }
@@ -902,6 +924,8 @@ background-size: cover;
         rowMap.asin ||
         rowMap.ASIN ||
         rowMap.Asin ||
+        rowMap.asin_code ||
+        rowMap.asinid ||
         extractAsin(rowMap.product_link || rowMap.product_url || rowMap.url || rowMap.link);
       if (!asin) return null;
       const category =
@@ -914,6 +938,7 @@ background-size: cover;
         rowMap.title ||
         rowMap.name ||
         rowMap.product_name ||
+        rowMap.product_title ||
         `Product #${index + 1} – ${broadCat} Pick`;
       const hook =
         rowMap.hook ||
@@ -928,13 +953,18 @@ background-size: cover;
         rowMap.image_url ||
         rowMap.image_link ||
         rowMap.thumbnail ||
+        rowMap.main_image ||
         fallbackImage;
       const approxPriceLabel =
-        rowMap.price_label || rowMap.price || "Check live price on Amazon.com";
+        rowMap.price_label ||
+        rowMap.price ||
+        rowMap.price_text ||
+        "Check live price on Amazon.com";
       const amazonUrl =
         rowMap.amazon_url ||
         rowMap.product_link ||
         rowMap.product_url ||
+        rowMap.url ||
         `https://${AMAZON_DOMAIN}/dp/${asin}/?tag=${AFFILIATE_TAG}`;
       const reviewText =
         `${title}\n\n` +
@@ -982,7 +1012,10 @@ background-size: cover;
         rowMap.marketplace;
       if (!marketValue) return true;
       const normalized = String(marketValue).trim().toUpperCase();
-      return normalized === TARGET_MARKET || normalized.startsWith(`${TARGET_MARKET}-`);
+      if (normalized === TARGET_MARKET || normalized.startsWith(`${TARGET_MARKET}-`)) {
+        return true;
+      }
+      return ["USA", "UNITED STATES", "UNITED STATES OF AMERICA", "美国"].includes(normalized);
     }
 
     function buildProductsFromCsv(csvText) {
@@ -1068,7 +1101,7 @@ background-size: cover;
 
     async function refreshProductsFromCsv() {
       try {
-        const response = await fetch(CSV_EXPORT_URL, {
+        const response = await fetch(resolveCsvUrl(), {
           cache: "no-store",
           mode: "cors",
           credentials: "include"
