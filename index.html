@@ -78,55 +78,7 @@
       flex-wrap: wrap;
       justify-content: flex-end;
     }
-    
-    .market-toggle-wrap{
-      flex: 1 1 100%;
-      display: flex;
-      justify-content: center;
-      margin: 6px 0 2px;
-    }
-    .market-toggle{
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      justify-content: center;
-      align-items: center;
-      padding: 6px 10px;
-      background: rgba(255,255,255,0.7);
-      border: 1px solid rgba(148,163,184,0.35);
-      border-radius: 999px;
-      box-shadow: var(--shadow-soft);
-    }
-    .market-pill{
-      position: relative;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 6px 10px;
-      border-radius: 999px;
-      border: 1px solid transparent;
-      cursor: pointer;
-      user-select: none;
-      font-size: 0.78rem;
-      color: var(--text-main);
-      transition: var(--transition-fast);
-    }
-    .market-pill input{
-      position: absolute;
-      opacity: 0;
-      pointer-events: none;
-    }
-    .market-pill:hover{
-      background: rgba(37,99,235,0.08);
-      border-color: rgba(37,99,235,0.22);
-    }
-    .market-pill.is-active{
-      background: var(--accent-strong);
-      border-color: var(--accent-strong);
-      color: #fff;
-      box-shadow: 0 10px 26px rgba(37,99,235,0.28);
-    }
-.nav-btn {
+    .nav-btn {
       border-radius: 999px;
       border: 1px solid transparent;
       padding: 6px 10px;
@@ -532,20 +484,18 @@ background-size: cover;
           Home
         </button>
 
-        
-        <div class="market-toggle-wrap" aria-label="Switch market">
-          <div class="market-toggle" id="marketToggle" role="radiogroup" aria-label="Select market">
-            <label class="market-pill"><input type="radio" name="market" value="US"> <span>US</span></label>
-            <label class="market-pill"><input type="radio" name="market" value="UK"> <span>UK</span></label>
-            <label class="market-pill"><input type="radio" name="market" value="DE"> <span>DE</span></label>
-            <label class="market-pill"><input type="radio" name="market" value="FR"> <span>FR</span></label>
-            <label class="market-pill"><input type="radio" name="market" value="IT"> <span>IT</span></label>
-            <label class="market-pill"><input type="radio" name="market" value="ES"> <span>ES</span></label>
-            <label class="market-pill"><input type="radio" name="market" value="CA"> <span>CA</span></label>
-            <label class="market-pill"><input type="radio" name="market" value="JP"> <span>JP</span></label>
-          </div>
+        <div class="market-switch" id="marketSwitch" aria-label="Select market">
+          <button class="nav-btn market" data-market="US">US</button>
+          <button class="nav-btn market" data-market="UK">UK</button>
+          <button class="nav-btn market" data-market="DE">DE</button>
+          <button class="nav-btn market" data-market="FR">FR</button>
+          <button class="nav-btn market" data-market="IT">IT</button>
+          <button class="nav-btn market" data-market="ES">ES</button>
+          <button class="nav-btn market" data-market="CA">CA</button>
+          <button class="nav-btn market" data-market="JP">JP</button>
         </div>
-<button class="nav-btn">Buying Guide</button>
+
+        <button class="nav-btn">Buying Guide</button>
         <button class="nav-btn">About</button>
         <button class="nav-btn">Privacy</button>
         <button class="nav-btn primary">
@@ -651,7 +601,7 @@ background-size: cover;
 
     <section class="grid" id="productGrid"><article class="product-card">
             <div class="product-card_media">
-              <img src="./US Deep Review • Smart Picks US_files/61bEKd+r9eL._AC_SX679_.jpg" alt="Product #1 – Electronics &amp; Gadgets Pick" loading="lazy" referrerpolicy="no-referrer">
+              <img src="./US Deep Review • Smart Picks US_files/61bEKd+r9eL._AC_SX679_.jpg" alt="Product #1 – Electronics &amp; Gadgets Pick" loading="lazy">
             </div>
             <div class="product-card_body">
               <div class="product-card_meta">
@@ -2967,13 +2917,10 @@ background-size: cover;
       if (titleEl) titleEl.textContent = `${market} Deep Review • Smart Picks ${market}`;
 
       // market buttons active state
-      document.querySelectorAll('#marketToggle input[name="market"]').forEach((inp) => {
-        const on = (inp.value || "").toUpperCase() === market;
-        inp.checked = on;
-        const pill = inp.closest(".market-pill");
-        if (pill) pill.classList.toggle("is-active", on);
+      document.querySelectorAll(".nav-btn.market").forEach((btn) => {
+        btn.classList.toggle("active", btn.dataset.market === market);
       });
-}
+    }
 
     // Rebuild derived arrays after rawProductsBase changes
     function rebuildDerivedProducts(market) {
@@ -3149,7 +3096,7 @@ const gridEl = document.getElementById("productGrid");
           card.className = "product-card";
           card.innerHTML = `
             <div class="product-card_media">
-              <img src="${p.image}" alt="${p.title}" loading="lazy" referrerpolicy="no-referrer" onerror="this.style.display='none';this.closest('.product-card_media').classList.add('img-broken');" />
+              <img src="${p.image}" alt="${p.title}" loading="lazy" onerror="this.style.display='none';this.closest('.product-card_media').classList.add('img-broken');" />
             </div>
             <div class="product-card_body">
               <div class="product-card_meta">
@@ -3260,9 +3207,9 @@ const gridEl = document.getElementById("productGrid");
     else renderProducts(products);
 
     // bind market buttons
-    document.querySelectorAll('#marketToggle input[name="market"]').forEach((inp) => {
-      inp.addEventListener("change", () => {
-        const m = (inp.value || "").toUpperCase();
+    document.querySelectorAll(".nav-btn.market").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const m = (btn.dataset.market || "").toUpperCase();
         if (!m) return;
         currentMarket = m;
         setMarketToUrl(currentMarket);
@@ -3270,7 +3217,8 @@ const gridEl = document.getElementById("productGrid");
         refreshMarket(currentMarket, "switch");
       });
     });
-// first live load + periodic refresh
+
+    // first live load + periodic refresh
     refreshMarket(currentMarket, "boot");
     setInterval(() => refreshMarket(currentMarket, "timer"), REFRESH_MS);
 
