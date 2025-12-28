@@ -2872,7 +2872,9 @@ background-size: cover;
     
     // ================== Multi-market + CSV live update ==================
     const MARKET_LIST = ["US","UK","DE","FR","IT","ES","CA","JP"];
-    const MARKET_DOMAINS = {
+    
+    const dataStatusEl = document.getElementById("dataStatus");
+const MARKET_DOMAINS = {
       US: "www.amazon.com",
       UK: "www.amazon.co.uk",
       DE: "www.amazon.de",
@@ -3011,7 +3013,7 @@ background-size: cover;
       return "";
     }
 
-    async function loadMarketCSV(market) {
+    async async function loadMarketCSV(market) {
       const file = `${market.toLowerCase()}.csv`;
       const url = `./${file}?v=${Date.now()}`;
       const res = await fetch(url, { cache: "no-store" });
@@ -3023,7 +3025,14 @@ background-size: cover;
 
       const idxMap = buildIndexMap(table[0]);
 
-      const out = [];
+      
+      const toHttps = (u) => {
+        u = String(u || \"\").trim();
+        if (!u) return \"\";
+        if (u.startsWith(\"http://\")) return \"https://\" + u.slice(7);
+        return u;
+      };
+const out = [];
       for (let r = 1; r < table.length; r++) {
         const row = table[r];
         const rowMarket = pick(row, idxMap, "market");
@@ -3038,7 +3047,7 @@ background-size: cover;
         const title = pick(row, idxMap, "title", "name");
 
         if (!asin || !image) continue;
-        out.push({ asin, image, link, title });
+        out.push({ asin, image: toHttps(image), link: toHttps(link), title });
       }
 
       // de-dup by asin
@@ -3050,32 +3059,32 @@ background-size: cover;
         return true;
       });
     }
-
     async function refreshMarket(market, reason) {
-      try {
-        if (dataStatusEl) dataStatusEl.textContent = `Updating (${market})…`;
-        const list = await loadMarketCSV(market);
-        if (!list.length) throw new Error("No products after filtering");
+  try {
+    if (dataStatusEl) dataStatusEl.textContent = `Updating (${market})…`;
+    const list = await loadMarketCSV(market);
+    if (!list.length) throw new Error("No products after filtering");
 
-        rawProductsBase = list; // overwrite base
-        rebuildDerivedProducts(market);
-        applyFilters();
-        if (dataStatusEl) dataStatusEl.textContent = `Live data (${market}) • ${new Date().toLocaleString()}`;
-      } catch (e) {
-        console.warn("[market refresh] fallback:", e);
-        rebuildDerivedProducts(market);
-        applyFilters();
-        if (dataStatusEl) dataStatusEl.textContent = `Fallback data (${market})`;
-      }
-    }
-    // ================== End Multi-market ==================
+    rawProductsBase = list; // overwrite base
+    rebuildDerivedProducts(market);
+    applyFilters();
+    if (dataStatusEl) dataStatusEl.textContent = `Live data (${market}) • ${new Date().toLocaleString()}`;
+  } catch (e) {
+    console.warn("[market refresh] fallback:", e);
+    rebuildDerivedProducts(market);
+    applyFilters();
+    if (dataStatusEl) dataStatusEl.textContent = `Fallback data (${market})`;
+  }
+}
+// ================== End Multi-market ==================
 const gridEl = document.getElementById("productGrid");
     const countEl = document.getElementById("productCount");
     const searchInput = document.getElementById("searchInput");
     const searchBtn = document.getElementById("searchBtn");
     const chipsContainer = document.getElementById("categoryChips");
 
-    const modalBackdrop = document.getElementById("reviewModalBackdrop");
+    
+const modalBackdrop = document.getElementById("reviewModalBackdrop");
     const modalTitle = document.getElementById("reviewModalTitle");
     const modalBody = document.getElementById("reviewModalBody");
     const modalAmazonLink = document.getElementById("reviewModalAmazonLink");
@@ -3217,6 +3226,8 @@ const gridEl = document.getElementById("productGrid");
         refreshMarket(currentMarket, "switch");
       });
     });
+
+    const REFRESH_MS = 15 * 60 * 1000;
 
     // first live load + periodic refresh
     refreshMarket(currentMarket, "boot");
