@@ -688,103 +688,12 @@ background-size: cover;
   <script>
     const AMAZON_DOMAIN = "www.amazon.com";
     const AFFILIATE_TAG = "us1987-20";
+    const CSV_EXPORT_URL = "http://154.48.226.95:5001/admin/Product/export_csv";
+    const AUTO_REFRESH_MINUTES = 15;
+    const TARGET_MARKET = "US";
 
     const baseCategories = ["Electronics", "Home", "Outdoor", "Car", "Office"];
-
-    const rawProductsBase = [
-      { asin: "B0DZC33VRN", image: "https://m.media-amazon.com/images/I/61bEKd+r9eL._AC_SX679_.jpg" },
-      { asin: "B0DH1KVXHR", image: "https://m.media-amazon.com/images/I/61tbpgPIKzL._AC_SL1480_.jpg" },
-      { asin: "B0FCCLB76S", image: "https://m.media-amazon.com/images/I/819O4J8xUbL._AC_SL1500_.jpg" },
-      { asin: "B0FLNYXYPD", image: "https://m.media-amazon.com/images/I/71L80b1n14L._AC_SL1500_.jpg" },
-      { asin: "B0FQBRQN8H", image: "https://m.media-amazon.com/images/I/71q1KV-C95L._AC_SX679_.jpg" },
-      { asin: "B0C8MFNTZR", image: "https://m.media-amazon.com/images/I/71EzyTLrPPL._SL1500_.jpg" },
-      { asin: "B0FQBR2X9T", image: "https://m.media-amazon.com/images/I/51HhsyBTUlL._AC_SX679_.jpg" },
-      { asin: "B0FRG5FWMM", image: "https://m.media-amazon.com/images/I/81v0KZ406GL._AC_SX679_.jpg" },
-      { asin: "B0FLP2JPQ3", image: "https://m.media-amazon.com/images/I/71pfk2zAN8L._AC_SL1500_.jpg" },
-      { asin: "B0FNWR8VJV", image: "https://m.media-amazon.com/images/I/71V+HiAf2uL._AC_SX679_.jpg" },
-      { asin: "B0FS7BLXR8", image: "https://m.media-amazon.com/images/I/71t85DVhCWL._SL1500_.jpg" },
-      { asin: "B0FLPRNHSP", image: "https://m.media-amazon.com/images/I/71bkn94dJLL._AC_SX679_.jpg" },
-      { asin: "B0DMQVRQ98", image: "https://m.media-amazon.com/images/I/71qyMTTYb3L._SX679_PIbundle-500,TopRight,0,0_AA679SH20_.jpg" },
-      { asin: "B0FSKTZ6BG", image: "https://m.media-amazon.com/images/I/71KOD4Ey8nL._SL1500_.jpg" },
-      { asin: "B0FLY64DDK", image: "https://m.media-amazon.com/images/I/81HBmk7GcrL._AC_SL1500_.jpg" },
-      { asin: "B0FZ5KCCMH", image: "https://m.media-amazon.com/images/I/71y2NRgQP3L._AC_SL1500_.jpg" },
-      { asin: "B0FLVXVVLX", image: "https://m.media-amazon.com/images/I/710SZWoZu1L._SL1500_.jpg" },
-      { asin: "B0DCBLR7PN", image: "https://m.media-amazon.com/images/I/71Kjtf0qMcL._AC_SX679_.jpg" },
-      { asin: "B0FB3BQ5YJ", image: "https://m.media-amazon.com/images/I/61WnV-HsHVL._AC_SX679_.jpg" },
-      { asin: "B0FVVMHFV9", image: "https://m.media-amazon.com/images/I/71mbHXdDSbL._AC_SX679_.jpg" },
-      { asin: "B0F8NM322Y", image: "https://m.media-amazon.com/images/I/713CvpSxZgL._SX679_.jpg" },
-      { asin: "B0FD2TPKYK", image: "https://m.media-amazon.com/images/I/71CgYew0enL._AC_SX522_.jpg" },
-      { asin: "B0FX3S85RJ", image: "https://m.media-amazon.com/images/I/71MGuIJTJQL._AC_SY500_.jpg" },
-      { asin: "B0CRL3Y11H", image: "https://m.media-amazon.com/images/I/7192CcnvSvL._AC_SL1500_.jpg" },
-      { asin: "B0FW3XV5JV", image: "https://m.media-amazon.com/images/I/71Zzqz1BvNL._AC_SL1500_.jpg" },
-      { asin: "B0FFLX21F3", image: "https://m.media-amazon.com/images/I/81CYoDEMO3L._AC_SX679_.jpg" },
-      { asin: "B0F9LPCYZ6", image: "https://m.media-amazon.com/images/I/61EVfuSDoML._AC_SX679_.jpg" },
-      { asin: "B0DPN3J57K", image: "https://m.media-amazon.com/images/I/51zaB-tcEdL._SX679_.jpg" },
-      { asin: "B0FLX45THX", image: "https://m.media-amazon.com/images/I/7144JjW4OhL._AC_SL1500_.jpg" },
-      { asin: "B0FW4VC4FP", image: "https://m.media-amazon.com/images/I/41BqJkHr17L._AC_SX569_.jpg" },
-      { asin: "B0FPVBQVTS", image: "https://m.media-amazon.com/images/I/71jEBXF6xKL._AC_SL1500_.jpg" },
-      { asin: "B0DKC14K5B", image: "http://154.48.226.8:5001/image/20250816/036dfaec84324a08beebb742438384a3.png" },
-      { asin: "B0FXXWW9R1", image: "https://m.media-amazon.com/images/I/51e9rcoopEL._AC_SX679_.jpg" },
-      { asin: "B0FCCLTD85", image: "https://m.media-amazon.com/images/I/815MWJoSvxL._AC_SL1500_.jpg" },
-      { asin: "B0D2HSGFG5", image: "https://m.media-amazon.com/images/I/718X3tpKCgL._AC_SL1500_.jpg" },
-      { asin: "B0F93Q9SCT", image: "https://m.media-amazon.com/images/I/6123nw+ZgXL._AC_SX679_.jpg" },
-      { asin: "B0FK4TZJRW", image: "https://m.media-amazon.com/images/I/618hQeMc3iL._SX425_.jpg" },
-      { asin: "B0F89XYFHN", image: "https://m.media-amazon.com/images/I/71LKZCvLsoL._AC_SL1500_.jpg" },
-      { asin: "B0FCS3Z42Q", image: "https://m.media-amazon.com/images/I/51TTSX5scpL._AC_SL1500_.jpg" },
-      { asin: "B0FL22DW8N", image: "https://m.media-amazon.com/images/I/81e7SpIU41L._AC_SL1500_.jpg" },
-      { asin: "B0F8H6H3FG", image: "https://m.media-amazon.com/images/I/61xp-W-rYdL._AC_SX679_PIbundle-2,TopRight,0,0_SH20_.jpg" },
-      { asin: "B0DX1T4B5F", image: "https://m.media-amazon.com/images/I/7159SgZNxuL._AC_SX679_.jpg" },
-      { asin: "B0DZHCNHHL", image: "https://m.media-amazon.com/images/I/71ciytkQuPL._AC_SX679_.jpg" },
-      { asin: "B0FJ1D5C2C", image: "https://m.media-amazon.com/images/I/61ZixoSGV-L._AC_SL1500_.jpg" },
-      { asin: "B087TDDZJF", image: "https://m.media-amazon.com/images/I/81hU0jdkjKL._AC_SX466_.jpg" },
-      { asin: "B0FRS2YBMX", image: "https://m.media-amazon.com/images/I/71zNC6KuE1L._AC_SL1500_.jpg" },
-      { asin: "B0FMJGFZ24", image: "https://m.media-amazon.com/images/I/61bZ7LnNNXL._AC_SL1500_.jpg" },
-      { asin: "B0DYCF9179", image: "https://m.media-amazon.com/images/I/71mWxIBnf-L._AC_SX569_.jpg" },
-      { asin: "B0FL6PSJ56", image: "https://m.media-amazon.com/images/I/51l0+ALuv-L._AC_SL1500_.jpg" },
-      { asin: "B0C5MJ15CY", image: "https://m.media-amazon.com/images/I/71JWshkp+WL._AC_SX679_.jpg" },
-      { asin: "B0FNRMQ6GQ", image: "https://m.media-amazon.com/images/I/51BT+feRXVL._AC_SY500_.jpg" },
-      { asin: "B0FLPH2MHP", image: "https://m.media-amazon.com/images/I/7116sEw8U+L._AC_SX679_.jpg" },
-      { asin: "B07J43CWC3", image: "https://m.media-amazon.com/images/I/71TdscB0a3L._AC_SX679_.jpg" },
-      { asin: "B0FL2PDGWR", image: "https://m.media-amazon.com/images/I/51Xr3p1H8iL._AC_SX679_.jpg" },
-      { asin: "B0FSCTCZM6", image: "https://m.media-amazon.com/images/I/51w0OwgO6BL._AC_SY500_.jpg" },
-      { asin: "B0FNMBR4QH", image: "https://m.media-amazon.com/images/I/71-W4LXnm4L._AC_SL1500_.jpg" },
-      { asin: "B0FD732B7L", image: "https://m.media-amazon.com/images/I/61Tyes6Js9L._AC_SX679_.jpg" },
-      { asin: "B0C17LTN9M", image: "https://m.media-amazon.com/images/I/71Q4hFxJIgL._AC_SX679_.jpg" },
-      { asin: "B0FD2YWFHR", image: "https://m.media-amazon.com/images/I/81axrR9aAPL._AC_SX679_.jpg" },
-      { asin: "B0CPSF6X3F", image: "https://m.media-amazon.com/images/I/71Rqn5myl2L._SL1500_.jpg" },
-      { asin: "B0FS9BLGFQ", image: "https://m.media-amazon.com/images/I/514s9ARxLYL._AC_SY500_.jpg" },
-      { asin: "B0FVVPBMKX", image: "https://m.media-amazon.com/images/I/712UhFxJh9L._AC_SX679_.jpg" },
-      { asin: "B0FS7P8C38", image: "https://m.media-amazon.com/images/I/61Su7Sy+pxL._AC_SL1500_.jpg" },
-      { asin: "B0DG5732Y9", image: "https://m.media-amazon.com/images/I/71jzMAPLBUL._AC_SX522_PIbundle-5,TopRight,0,0_SH20_.jpg" },
-      { asin: "B0FVFBHRQV", image: "https://m.media-amazon.com/images/I/81nlnhVWj-L._AC_SL1500_.jpg" },
-      { asin: "B0FPSSKQFT", image: "https://m.media-amazon.com/images/I/61rJ3Gp6-3L._AC_SL1500_.jpg" },
-      { asin: "B0FW3QVH5F", image: "https://m.media-amazon.com/images/I/61etDCCE0IL._AC_SL1500_.jpg" },
-      { asin: "B0FH9QT9XS", image: "https://m.media-amazon.com/images/I/71+MpbZ1vyL._AC_SY300_SX300_QL70_FMwebp_.jpg" },
-      { asin: "B0FHW4528N", image: "https://m.media-amazon.com/images/I/61o6vBGyjRL._AC_SX425_.jpg" },
-      { asin: "B0DQ5BHRLS", image: "https://m.media-amazon.com/images/I/71AQVU3ghbL._AC_SX522_.jpg" },
-      { asin: "B0F8J3PRJY", image: "https://m.media-amazon.com/images/I/71EqhDNpbwL._AC_SX679_PIbundle-2,TopRight,0,0_SH20_.jpg" },
-      { asin: "B0FJG5GK6K", image: "https://m.media-amazon.com/images/I/71Es5kAMo8L._AC_SX679_.jpg" },
-      { asin: "B0FVG6SB77", image: "https://m.media-amazon.com/images/I/61FdE8rB8hL._SL1500_.jpg" },
-      { asin: "B0C2Y6WXJ7", image: "https://m.media-amazon.com/images/I/71PmooY4u6L._AC_SL1500_.jpg" },
-      { asin: "B0D4Z356T4", image: "https://m.media-amazon.com/images/I/61tvDYmYFSL._AC_SX679_.jpg" },
-      { asin: "B0FS6333FR", image: "https://m.media-amazon.com/images/I/71e2WhAYuGL._AC_SL1500_.jpg" },
-      { asin: "B0FP4Y5XYN", image: "https://m.media-amazon.com/images/I/710pz06zADL._AC_SX569_.jpg" },
-      { asin: "B0F89ZXVFV", image: "https://m.media-amazon.com/images/I/71w1udWz-mL._AC_SL1500_.jpg" },
-      { asin: "B0FL77RR8Q", image: "https://m.media-amazon.com/images/I/81t41a5SH+L._AC_SX569_.jpg" },
-      { asin: "B0FP57P26T", image: "https://m.media-amazon.com/images/I/91WJC82XLlL._AC_SL1500_.jpg" },
-      { asin: "B0FY5VW8W6", image: "https://m.media-amazon.com/images/I/61VfACMaJaL._AC_SL1500_.jpg" },
-      { asin: "B0CND5NHJS", image: "http://154.48.226.8:5001/image/20250818/9f8d459b3aee4533a763c12d2260f933.png" },
-      { asin: "B0DWWP4TMM", image: "https://m.media-amazon.com/images/I/71+HCuIxdHL._AC_SX522_.jpg" },
-      { asin: "B0BNN2MH6C", image: "https://m.media-amazon.com/images/I/61OnKA+f1OL._AC_SX679_.jpg" },
-      { asin: "B09Q5HW5B1", image: "https://m.media-amazon.com/images/I/81nmEvjDTHL._AC_SX522_.jpg" },
-    ];
-
-    const rawProducts = rawProductsBase.map((p, index) => ({
-      id: index + 1,
-      asin: p.asin,
-      image: p.image,
-      category: baseCategories[index % baseCategories.length]
-    }));
+    const fallbackImage = "https://m.media-amazon.com/images/I/81CYoDEMO3L._AC_SX679_.jpg";
 
     const CATEGORY_MAP = {
       Electronics: "Electronics & Gadgets",
@@ -798,33 +707,7 @@ background-size: cover;
       Other: "Office & Daily Use"
     };
 
-    const products = rawProducts.map((p, index) => {
-      const broadCat = CATEGORY_MAP[p.category] || "Office & Daily Use";
-      const title = `Product #${index + 1} – ${broadCat} Pick`;
-      const hook =
-        `This pick is designed as a practical option in the ${broadCat.toLowerCase()} space for US shoppers, balancing everyday performance and value.`;
-      const details =
-        "Use this shortlist as a quick way to spot products that may deserve a closer look on the retailer's product page. Each card focuses on simple fit, features and everyday US use rather than chasing extreme specs.";
-      const approxPriceLabel = "Check live price on Amazon.com";
-      const amazonUrl = `https://${AMAZON_DOMAIN}/dp/${p.asin}/?tag=${AFFILIATE_TAG}`;
-      const reviewText =
-        `${title}\n\n` +
-        `This US-focused editorial note highlights key reasons why this item might be a good fit:\n` +
-        `• Everyday use: aimed at typical home or personal use rather than specialist scenarios.\n` +
-        `• Effort vs. benefit: chosen where setup, maintenance and day-to-day use feel reasonable for most people.\n` +
-        `• Value: not focused on being the cheapest, but instead offering a balanced feature set of features for the price.\n\n` +
-        `Always open the full product page on Amazon.com to check the latest details, compatibility notes and customer reviews before you decide.`;
-      return {
-        ...p,
-        broadCategory: broadCat,
-        title,
-        hook,
-        details,
-        approxPriceLabel,
-        amazonUrl,
-        reviewText
-      };
-    });
+    let products = [];
 
     const gridEl = document.getElementById("productGrid");
     const countEl = document.getElementById("productCount");
@@ -953,7 +836,264 @@ background-size: cover;
       if (e.key === "Escape") closeReviewModal();
     });
 
-    renderProducts(products);
+    function parseCsv(text) {
+      const sanitized = text.replace(/^\uFEFF/, "");
+      const delimiterCandidates = [",", ";", "\t", "|"];
+      const headerLine = sanitized.split(/\r?\n/).find((line) => line.trim().length);
+      const delimiter = delimiterCandidates.reduce((best, candidate) => {
+        const count = headerLine ? headerLine.split(candidate).length : 0;
+        return count > best.count ? { value: candidate, count } : best;
+      }, { value: ",", count: 0 }).value;
+      const rows = [];
+      let current = [];
+      let cell = "";
+      let inQuotes = false;
+      for (let i = 0; i < sanitized.length; i += 1) {
+        const char = sanitized[i];
+        const next = sanitized[i + 1];
+        if (char === '"' && inQuotes && next === '"') {
+          cell += '"';
+          i += 1;
+        } else if (char === '"') {
+          inQuotes = !inQuotes;
+        } else if (char === delimiter && !inQuotes) {
+          current.push(cell);
+          cell = "";
+        } else if ((char === "\n" || char === "\r") && !inQuotes) {
+          if (cell.length || current.length) {
+            current.push(cell);
+            rows.push(current);
+            current = [];
+            cell = "";
+          }
+        } else {
+          cell += char;
+        }
+      }
+      if (cell.length || current.length) {
+        current.push(cell);
+        rows.push(current);
+      }
+      return rows;
+    }
+
+    function buildRowMap(headers, row) {
+      const map = {};
+      headers.forEach((header, index) => {
+        map[header] = row[index] ? row[index].trim() : "";
+      });
+      return map;
+    }
+
+    function extractAsin(value) {
+      if (!value) return "";
+      const direct = value.match(/\b([A-Z0-9]{10})\b/i);
+      if (direct) return direct[1].toUpperCase();
+      const dp = value.match(/\/dp\/([A-Z0-9]{10})/i);
+      if (dp) return dp[1].toUpperCase();
+      const gp = value.match(/\/gp\/product\/([A-Z0-9]{10})/i);
+      if (gp) return gp[1].toUpperCase();
+      const asinParam = value.match(/[?&]asin=([A-Z0-9]{10})/i);
+      return asinParam ? asinParam[1].toUpperCase() : "";
+    }
+
+    function normalizeRow(rowMap, index) {
+      const asin =
+        rowMap.asin ||
+        rowMap.ASIN ||
+        rowMap.Asin ||
+        extractAsin(rowMap.product_link || rowMap.product_url || rowMap.url || rowMap.link);
+      if (!asin) return null;
+      const category =
+        rowMap.category ||
+        rowMap.Category ||
+        rowMap.type ||
+        baseCategories[index % baseCategories.length];
+      const broadCat = CATEGORY_MAP[category] || category || "Office & Daily Use";
+      const title =
+        rowMap.title ||
+        rowMap.name ||
+        rowMap.product_name ||
+        `Product #${index + 1} – ${broadCat} Pick`;
+      const hook =
+        rowMap.hook ||
+        rowMap.short_note ||
+        `This pick is designed as a practical option in the ${broadCat.toLowerCase()} space for US shoppers, balancing everyday performance and value.`;
+      const details =
+        rowMap.details ||
+        rowMap.description ||
+        "Use this shortlist as a quick way to spot products that may deserve a closer look on the retailer's product page. Each card focuses on simple fit, features and everyday US use rather than chasing extreme specs.";
+      const image =
+        rowMap.image ||
+        rowMap.image_url ||
+        rowMap.image_link ||
+        rowMap.thumbnail ||
+        fallbackImage;
+      const approxPriceLabel =
+        rowMap.price_label || rowMap.price || "Check live price on Amazon.com";
+      const amazonUrl =
+        rowMap.amazon_url ||
+        rowMap.product_link ||
+        rowMap.product_url ||
+        `https://${AMAZON_DOMAIN}/dp/${asin}/?tag=${AFFILIATE_TAG}`;
+      const reviewText =
+        `${title}\n\n` +
+        `This US-focused editorial note highlights key reasons why this item might be a good fit:\n` +
+        `• Everyday use: aimed at typical home or personal use rather than specialist scenarios.\n` +
+        `• Effort vs. benefit: chosen where setup, maintenance and day-to-day use feel reasonable for most people.\n` +
+        `• Value: not focused on being the cheapest, but instead offering a balanced feature set of features for the price.\n\n` +
+        `Always open the full product page on Amazon.com to check the latest details, compatibility notes and customer reviews before you decide.`;
+      return {
+        id: index + 1,
+        asin,
+        image,
+        category,
+        broadCategory: broadCat,
+        title,
+        hook,
+        details,
+        approxPriceLabel,
+        amazonUrl,
+        reviewText
+      };
+    }
+
+    function isRowActive(rowMap) {
+      const flag =
+        rowMap.status ||
+        rowMap.active ||
+        rowMap.is_active ||
+        rowMap.online ||
+        rowMap.enabled;
+      if (flag === undefined || flag === null || flag === "") return true;
+      const normalized = String(flag).trim().toLowerCase();
+      return !["0", "false", "no", "off", "inactive", "disabled", "down"].includes(
+        normalized
+      );
+    }
+
+    function matchesTargetMarket(rowMap) {
+      const marketValue =
+        rowMap.market ||
+        rowMap.country ||
+        rowMap.region ||
+        rowMap.site ||
+        rowMap.locale ||
+        rowMap.marketplace;
+      if (!marketValue) return true;
+      const normalized = String(marketValue).trim().toUpperCase();
+      return normalized === TARGET_MARKET || normalized.startsWith(`${TARGET_MARKET}-`);
+    }
+
+    function buildProductsFromCsv(csvText) {
+      const rows = parseCsv(csvText);
+      if (!rows.length) return [];
+      const headers = rows[0].map((h) => h.trim());
+      const dedupe = new Set();
+      return rows
+        .slice(1)
+        .map((row) => buildRowMap(headers, row))
+        .filter((rowMap) => isRowActive(rowMap))
+        .filter((rowMap) => matchesTargetMarket(rowMap))
+        .map((rowMap, index) => normalizeRow(rowMap, index))
+        .filter(Boolean)
+        .filter((product) => {
+          if (dedupe.has(product.asin)) return false;
+          dedupe.add(product.asin);
+          return true;
+        });
+    }
+
+    function buildProductsFromJson(data) {
+      if (!Array.isArray(data)) return [];
+      const dedupe = new Set();
+      return data
+        .map((row) => {
+          if (row && typeof row === "object") return row;
+          return null;
+        })
+        .filter(Boolean)
+        .map((rowMap, index) => {
+          const normalizedMap = {};
+          Object.keys(rowMap).forEach((key) => {
+            normalizedMap[key] = rowMap[key] === null ? "" : String(rowMap[key]);
+          });
+          return { normalizedMap, index };
+        })
+        .filter(({ normalizedMap }) => isRowActive(normalizedMap))
+        .filter(({ normalizedMap }) => matchesTargetMarket(normalizedMap))
+        .map(({ normalizedMap, index }) => normalizeRow(normalizedMap, index))
+        .filter(Boolean)
+        .filter((product) => {
+          if (dedupe.has(product.asin)) return false;
+          dedupe.add(product.asin);
+          return true;
+        });
+    }
+
+    function buildFallbackProducts() {
+      return baseCategories.map((category, index) => {
+        const broadCat = CATEGORY_MAP[category] || "Office & Daily Use";
+        const title = `Product #${index + 1} – ${broadCat} Pick`;
+        const hook =
+          `This pick is designed as a practical option in the ${broadCat.toLowerCase()} space for US shoppers, balancing everyday performance and value.`;
+        const details =
+          "Use this shortlist as a quick way to spot products that may deserve a closer look on the retailer's product page. Each card focuses on simple fit, features and everyday US use rather than chasing extreme specs.";
+        const approxPriceLabel = "Check live price on Amazon.com";
+        const amazonUrl = `https://${AMAZON_DOMAIN}/s?k=${encodeURIComponent(
+          broadCat
+        )}&tag=${AFFILIATE_TAG}`;
+        const reviewText =
+          `${title}\n\n` +
+          `This US-focused editorial note highlights key reasons why this item might be a good fit:\n` +
+          `• Everyday use: aimed at typical home or personal use rather than specialist scenarios.\n` +
+          `• Effort vs. benefit: chosen where setup, maintenance and day-to-day use feel reasonable for most people.\n` +
+          `• Value: not focused on being the cheapest, but instead offering a balanced feature set of features for the price.\n\n` +
+          `Always open the full product page on Amazon.com to check the latest details, compatibility notes and customer reviews before you decide.`;
+        return {
+          id: index + 1,
+          asin: `FALLBACK-${index + 1}`,
+          image: fallbackImage,
+          category,
+          broadCategory: broadCat,
+          title,
+          hook,
+          details,
+          approxPriceLabel,
+          amazonUrl,
+          reviewText
+        };
+      });
+    }
+
+    async function refreshProductsFromCsv() {
+      try {
+        const response = await fetch(CSV_EXPORT_URL, {
+          cache: "no-store",
+          mode: "cors",
+          credentials: "include"
+        });
+        if (!response.ok) throw new Error(`CSV fetch failed: ${response.status}`);
+        const contentType = response.headers.get("content-type") || "";
+        const payload = await response.text();
+        const csvProducts = contentType.includes("application/json")
+          ? buildProductsFromJson(JSON.parse(payload))
+          : buildProductsFromCsv(payload);
+        if (csvProducts.length) {
+          products = csvProducts;
+          applyFilters();
+          return;
+        }
+        throw new Error("CSV returned no valid products");
+      } catch (error) {
+        console.warn("CSV update failed, falling back to local list.", error);
+        products = buildFallbackProducts();
+        applyFilters();
+      }
+    }
+
+    refreshProductsFromCsv();
+    setInterval(refreshProductsFromCsv, AUTO_REFRESH_MINUTES * 60 * 1000);
   </script>
 </body>
 </html>
