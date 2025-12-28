@@ -1,0 +1,32 @@
+name: Sync US CSV
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "*/15 * * * *"  # 每15分钟
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download CSV
+        run: |
+          curl -L --fail --silent --show-error \
+            -H "User-Agent: Mozilla/5.0" \
+            "http://154.48.226.95:5001/admin/Product/export_csv" \
+            -o us.csv
+
+      - name: Validate CSV not empty
+        run: |
+          test -s us.csv
+          head -n 3 us.csv
+
+      - name: Commit & Push if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add us.csv
+          git diff --cached --quiet || (git commit -m "Update us.csv" && git push)
