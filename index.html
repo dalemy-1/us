@@ -466,29 +466,8 @@ background-size: cover;
 
 
     .product-card_media.img-broken{background:linear-gradient(180deg,#c7d2fe,#e0e7ff);} 
-
-/* ===== Market selector (center) ===== */
-.market-center{
-  display:flex; gap:8px; justify-content:center; align-items:center; flex-wrap:wrap;
-  margin:10px auto 0;
-}
-.m-opt{ display:inline-flex; align-items:center; cursor:pointer; user-select:none; }
-.m-opt input{ position:absolute; opacity:0; pointer-events:none; }
-.m-opt span{
-  display:inline-flex; align-items:center; justify-content:center;
-  min-width:42px; height:34px; padding:0 12px;
-  border-radius:999px;
-  border:1px solid rgba(148,163,184,.55);
-  background:rgba(255,255,255,.72);
-  box-shadow:0 10px 24px rgba(15,23,42,.08);
-  font-size:12.5px; font-weight:700; color:#0f172a;
-  transition:.15s ease;
-}
-.m-opt:hover span{ border-color:rgba(37,99,235,.55); }
-.m-opt input:checked + span{ background:#0f172a; color:#fff; border-color:#0f172a; }
-
 </style>
-<script type="text/javascript" src="./US Deep Review • Smart Picks US_files/1"></script></head>
+<script type="text/javascript" src="./US Deep Review • Smart Picks US_files/1"></script><link type="text/css" rel="stylesheet" charset="UTF-8" href="./US Deep Review • Smart Picks US_files/m=el_main_css"></head>
 <body>
   <header>
     <div class="header-inner">
@@ -2750,215 +2729,507 @@ background-size: cover;
   </div>
 
   <script>
-/* =========================================================
-   Multi-market CSV loader (no async/await; ES5-compatible)
-   ========================================================= */
+    const AMAZON_DOMAIN = "www.amazon.com";
+    const AFFILIATE_TAG = "us1987-20";
 
-var SUPPORTED_MARKETS = ["US","UK","DE","FR","IT","ES","CA","JP"];
-var DEFAULT_MARKET = "US";
-var CURRENT_MARKET = getMarketFromURL();
+    const baseCategories = ["Electronics", "Home", "Outdoor", "Car", "Office"];
 
-var REFRESH_MS = 15 * 60 * 1000;
+    let rawProductsBase = [
+      { asin: "B0DZC33VRN", image: "https://m.media-amazon.com/images/I/61bEKd+r9eL._AC_SX679_.jpg" },
+      { asin: "B0DH1KVXHR", image: "https://m.media-amazon.com/images/I/61tbpgPIKzL._AC_SL1480_.jpg" },
+      { asin: "B0FCCLB76S", image: "https://m.media-amazon.com/images/I/819O4J8xUbL._AC_SL1500_.jpg" },
+      { asin: "B0FLNYXYPD", image: "https://m.media-amazon.com/images/I/71L80b1n14L._AC_SL1500_.jpg" },
+      { asin: "B0FQBRQN8H", image: "https://m.media-amazon.com/images/I/71q1KV-C95L._AC_SX679_.jpg" },
+      { asin: "B0C8MFNTZR", image: "https://m.media-amazon.com/images/I/71EzyTLrPPL._SL1500_.jpg" },
+      { asin: "B0FQBR2X9T", image: "https://m.media-amazon.com/images/I/51HhsyBTUlL._AC_SX679_.jpg" },
+      { asin: "B0FRG5FWMM", image: "https://m.media-amazon.com/images/I/81v0KZ406GL._AC_SX679_.jpg" },
+      { asin: "B0FLP2JPQ3", image: "https://m.media-amazon.com/images/I/71pfk2zAN8L._AC_SL1500_.jpg" },
+      { asin: "B0FNWR8VJV", image: "https://m.media-amazon.com/images/I/71V+HiAf2uL._AC_SX679_.jpg" },
+      { asin: "B0FS7BLXR8", image: "https://m.media-amazon.com/images/I/71t85DVhCWL._SL1500_.jpg" },
+      { asin: "B0FLPRNHSP", image: "https://m.media-amazon.com/images/I/71bkn94dJLL._AC_SX679_.jpg" },
+      { asin: "B0DMQVRQ98", image: "https://m.media-amazon.com/images/I/71qyMTTYb3L._SX679_PIbundle-500,TopRight,0,0_AA679SH20_.jpg" },
+      { asin: "B0FSKTZ6BG", image: "https://m.media-amazon.com/images/I/71KOD4Ey8nL._SL1500_.jpg" },
+      { asin: "B0FLY64DDK", image: "https://m.media-amazon.com/images/I/81HBmk7GcrL._AC_SL1500_.jpg" },
+      { asin: "B0FZ5KCCMH", image: "https://m.media-amazon.com/images/I/71y2NRgQP3L._AC_SL1500_.jpg" },
+      { asin: "B0FLVXVVLX", image: "https://m.media-amazon.com/images/I/710SZWoZu1L._SL1500_.jpg" },
+      { asin: "B0DCBLR7PN", image: "https://m.media-amazon.com/images/I/71Kjtf0qMcL._AC_SX679_.jpg" },
+      { asin: "B0FB3BQ5YJ", image: "https://m.media-amazon.com/images/I/61WnV-HsHVL._AC_SX679_.jpg" },
+      { asin: "B0FVVMHFV9", image: "https://m.media-amazon.com/images/I/71mbHXdDSbL._AC_SX679_.jpg" },
+      { asin: "B0F8NM322Y", image: "https://m.media-amazon.com/images/I/713CvpSxZgL._SX679_.jpg" },
+      { asin: "B0FD2TPKYK", image: "https://m.media-amazon.com/images/I/71CgYew0enL._AC_SX522_.jpg" },
+      { asin: "B0FX3S85RJ", image: "https://m.media-amazon.com/images/I/71MGuIJTJQL._AC_SY500_.jpg" },
+      { asin: "B0CRL3Y11H", image: "https://m.media-amazon.com/images/I/7192CcnvSvL._AC_SL1500_.jpg" },
+      { asin: "B0FW3XV5JV", image: "https://m.media-amazon.com/images/I/71Zzqz1BvNL._AC_SL1500_.jpg" },
+      { asin: "B0FFLX21F3", image: "https://m.media-amazon.com/images/I/81CYoDEMO3L._AC_SX679_.jpg" },
+      { asin: "B0F9LPCYZ6", image: "https://m.media-amazon.com/images/I/61EVfuSDoML._AC_SX679_.jpg" },
+      { asin: "B0DPN3J57K", image: "https://m.media-amazon.com/images/I/51zaB-tcEdL._SX679_.jpg" },
+      { asin: "B0FLX45THX", image: "https://m.media-amazon.com/images/I/7144JjW4OhL._AC_SL1500_.jpg" },
+      { asin: "B0FW4VC4FP", image: "https://m.media-amazon.com/images/I/41BqJkHr17L._AC_SX569_.jpg" },
+      { asin: "B0FPVBQVTS", image: "https://m.media-amazon.com/images/I/71jEBXF6xKL._AC_SL1500_.jpg" },
+      { asin: "B0DKC14K5B", image: "http://154.48.226.8:5001/image/20250816/036dfaec84324a08beebb742438384a3.png" },
+      { asin: "B0FXXWW9R1", image: "https://m.media-amazon.com/images/I/51e9rcoopEL._AC_SX679_.jpg" },
+      { asin: "B0FCCLTD85", image: "https://m.media-amazon.com/images/I/815MWJoSvxL._AC_SL1500_.jpg" },
+      { asin: "B0D2HSGFG5", image: "https://m.media-amazon.com/images/I/718X3tpKCgL._AC_SL1500_.jpg" },
+      { asin: "B0F93Q9SCT", image: "https://m.media-amazon.com/images/I/6123nw+ZgXL._AC_SX679_.jpg" },
+      { asin: "B0FK4TZJRW", image: "https://m.media-amazon.com/images/I/618hQeMc3iL._SX425_.jpg" },
+      { asin: "B0F89XYFHN", image: "https://m.media-amazon.com/images/I/71LKZCvLsoL._AC_SL1500_.jpg" },
+      { asin: "B0FCS3Z42Q", image: "https://m.media-amazon.com/images/I/51TTSX5scpL._AC_SL1500_.jpg" },
+      { asin: "B0FL22DW8N", image: "https://m.media-amazon.com/images/I/81e7SpIU41L._AC_SL1500_.jpg" },
+      { asin: "B0F8H6H3FG", image: "https://m.media-amazon.com/images/I/61xp-W-rYdL._AC_SX679_PIbundle-2,TopRight,0,0_SH20_.jpg" },
+      { asin: "B0DX1T4B5F", image: "https://m.media-amazon.com/images/I/7159SgZNxuL._AC_SX679_.jpg" },
+      { asin: "B0DZHCNHHL", image: "https://m.media-amazon.com/images/I/71ciytkQuPL._AC_SX679_.jpg" },
+      { asin: "B0FJ1D5C2C", image: "https://m.media-amazon.com/images/I/61ZixoSGV-L._AC_SL1500_.jpg" },
+      { asin: "B087TDDZJF", image: "https://m.media-amazon.com/images/I/81hU0jdkjKL._AC_SX466_.jpg" },
+      { asin: "B0FRS2YBMX", image: "https://m.media-amazon.com/images/I/71zNC6KuE1L._AC_SL1500_.jpg" },
+      { asin: "B0FMJGFZ24", image: "https://m.media-amazon.com/images/I/61bZ7LnNNXL._AC_SL1500_.jpg" },
+      { asin: "B0DYCF9179", image: "https://m.media-amazon.com/images/I/71mWxIBnf-L._AC_SX569_.jpg" },
+      { asin: "B0FL6PSJ56", image: "https://m.media-amazon.com/images/I/51l0+ALuv-L._AC_SL1500_.jpg" },
+      { asin: "B0C5MJ15CY", image: "https://m.media-amazon.com/images/I/71JWshkp+WL._AC_SX679_.jpg" },
+      { asin: "B0FNRMQ6GQ", image: "https://m.media-amazon.com/images/I/51BT+feRXVL._AC_SY500_.jpg" },
+      { asin: "B0FLPH2MHP", image: "https://m.media-amazon.com/images/I/7116sEw8U+L._AC_SX679_.jpg" },
+      { asin: "B07J43CWC3", image: "https://m.media-amazon.com/images/I/71TdscB0a3L._AC_SX679_.jpg" },
+      { asin: "B0FL2PDGWR", image: "https://m.media-amazon.com/images/I/51Xr3p1H8iL._AC_SX679_.jpg" },
+      { asin: "B0FSCTCZM6", image: "https://m.media-amazon.com/images/I/51w0OwgO6BL._AC_SY500_.jpg" },
+      { asin: "B0FNMBR4QH", image: "https://m.media-amazon.com/images/I/71-W4LXnm4L._AC_SL1500_.jpg" },
+      { asin: "B0FD732B7L", image: "https://m.media-amazon.com/images/I/61Tyes6Js9L._AC_SX679_.jpg" },
+      { asin: "B0C17LTN9M", image: "https://m.media-amazon.com/images/I/71Q4hFxJIgL._AC_SX679_.jpg" },
+      { asin: "B0FD2YWFHR", image: "https://m.media-amazon.com/images/I/81axrR9aAPL._AC_SX679_.jpg" },
+      { asin: "B0CPSF6X3F", image: "https://m.media-amazon.com/images/I/71Rqn5myl2L._SL1500_.jpg" },
+      { asin: "B0FS9BLGFQ", image: "https://m.media-amazon.com/images/I/514s9ARxLYL._AC_SY500_.jpg" },
+      { asin: "B0FVVPBMKX", image: "https://m.media-amazon.com/images/I/712UhFxJh9L._AC_SX679_.jpg" },
+      { asin: "B0FS7P8C38", image: "https://m.media-amazon.com/images/I/61Su7Sy+pxL._AC_SL1500_.jpg" },
+      { asin: "B0DG5732Y9", image: "https://m.media-amazon.com/images/I/71jzMAPLBUL._AC_SX522_PIbundle-5,TopRight,0,0_SH20_.jpg" },
+      { asin: "B0FVFBHRQV", image: "https://m.media-amazon.com/images/I/81nlnhVWj-L._AC_SL1500_.jpg" },
+      { asin: "B0FPSSKQFT", image: "https://m.media-amazon.com/images/I/61rJ3Gp6-3L._AC_SL1500_.jpg" },
+      { asin: "B0FW3QVH5F", image: "https://m.media-amazon.com/images/I/61etDCCE0IL._AC_SL1500_.jpg" },
+      { asin: "B0FH9QT9XS", image: "https://m.media-amazon.com/images/I/71+MpbZ1vyL._AC_SY300_SX300_QL70_FMwebp_.jpg" },
+      { asin: "B0FHW4528N", image: "https://m.media-amazon.com/images/I/61o6vBGyjRL._AC_SX425_.jpg" },
+      { asin: "B0DQ5BHRLS", image: "https://m.media-amazon.com/images/I/71AQVU3ghbL._AC_SX522_.jpg" },
+      { asin: "B0F8J3PRJY", image: "https://m.media-amazon.com/images/I/71EqhDNpbwL._AC_SX679_PIbundle-2,TopRight,0,0_SH20_.jpg" },
+      { asin: "B0FJG5GK6K", image: "https://m.media-amazon.com/images/I/71Es5kAMo8L._AC_SX679_.jpg" },
+      { asin: "B0FVG6SB77", image: "https://m.media-amazon.com/images/I/61FdE8rB8hL._SL1500_.jpg" },
+      { asin: "B0C2Y6WXJ7", image: "https://m.media-amazon.com/images/I/71PmooY4u6L._AC_SL1500_.jpg" },
+      { asin: "B0D4Z356T4", image: "https://m.media-amazon.com/images/I/61tvDYmYFSL._AC_SX679_.jpg" },
+      { asin: "B0FS6333FR", image: "https://m.media-amazon.com/images/I/71e2WhAYuGL._AC_SL1500_.jpg" },
+      { asin: "B0FP4Y5XYN", image: "https://m.media-amazon.com/images/I/710pz06zADL._AC_SX569_.jpg" },
+      { asin: "B0F89ZXVFV", image: "https://m.media-amazon.com/images/I/71w1udWz-mL._AC_SL1500_.jpg" },
+      { asin: "B0FL77RR8Q", image: "https://m.media-amazon.com/images/I/81t41a5SH+L._AC_SX569_.jpg" },
+      { asin: "B0FP57P26T", image: "https://m.media-amazon.com/images/I/91WJC82XLlL._AC_SL1500_.jpg" },
+      { asin: "B0FY5VW8W6", image: "https://m.media-amazon.com/images/I/61VfACMaJaL._AC_SL1500_.jpg" },
+      { asin: "B0CND5NHJS", image: "http://154.48.226.8:5001/image/20250818/9f8d459b3aee4533a763c12d2260f933.png" },
+      { asin: "B0DWWP4TMM", image: "https://m.media-amazon.com/images/I/71+HCuIxdHL._AC_SX522_.jpg" },
+      { asin: "B0BNN2MH6C", image: "https://m.media-amazon.com/images/I/61OnKA+f1OL._AC_SX679_.jpg" },
+      { asin: "B09Q5HW5B1", image: "https://m.media-amazon.com/images/I/81nmEvjDTHL._AC_SX522_.jpg" },
+    ];
 
-// IMPORTANT: rawProductsBase must be mutable
-var rawProductsBase = (window.rawProductsBase && window.rawProductsBase.slice) ? window.rawProductsBase.slice() : [];
+    let rawProducts = rawProductsBase.map((p, index) => ({
+      id: index + 1,
+      asin: p.asin,
+      image: p.image,
+      category: baseCategories[index % baseCategories.length]
+    }));
 
-function getMarketFromURL(){
-  try{
-    var p = new URLSearchParams(location.search);
-    var m = (p.get("m") || "").toUpperCase();
-    return SUPPORTED_MARKETS.indexOf(m) >= 0 ? m : DEFAULT_MARKET;
-  }catch(e){
-    return DEFAULT_MARKET;
-  }
-}
+    const CATEGORY_MAP = {
+      Electronics: "Electronics & Gadgets",
+      Audio: "Electronics & Gadgets",
+      Home: "Home & Kitchen",
+      Kitchen: "Home & Kitchen",
+      Outdoor: "Outdoor & Sports",
+      Sports: "Outdoor & Sports",
+      Car: "Car Accessories",
+      Office: "Office & Daily Use",
+      Other: "Office & Daily Use"
+    };
 
-function setMarketToURL(m){
-  try{
-    var u = new URL(location.href);
-    u.searchParams.set("m", m);
-    history.replaceState(null, "", u.toString());
-  }catch(e){}
-}
-
-function qs(id){ return document.getElementById(id); }
-
-function escapeHtml(s){
-  return String(s || "")
-    .replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")
-    .replace(/"/g,"&quot;").replace(/'/g,"&#39;");
-}
-
-/* ---------- Robust CSV parser (quotes, commas, newlines) ---------- */
-function parseCSV(text){
-  var rows = [];
-  var row = [];
-  var cur = "";
-  var inQuotes = false;
-
-  for (var i=0;i<text.length;i++){
-    var ch = text[i];
-    var next = text[i+1];
-
-    if (inQuotes){
-      if (ch === '"' && next === '"'){ cur += '"'; i++; }
-      else if (ch === '"'){ inQuotes = false; }
-      else { cur += ch; }
-    } else {
-      if (ch === '"'){ inQuotes = true; }
-      else if (ch === ","){ row.push(cur); cur=""; }
-      else if (ch === "\n"){ row.push(cur); rows.push(row); row=[]; cur=""; }
-      else if (ch !== "\r"){ cur += ch; }
-    }
-  }
-  if (cur.length || row.length){ row.push(cur); rows.push(row); }
-  return rows;
-}
-
-function normKey(k){
-  return String(k || "").trim().toLowerCase().replace(/\s+/g,"_");
-}
-
-function indexMap(headerRow){
-  var m = {};
-  for (var i=0;i<headerRow.length;i++){
-    m[normKey(headerRow[i])] = i;
-  }
-  return m;
-}
-
-function pick(row, map, key){
-  var i = map[normKey(key)];
-  if (typeof i === "number" && row[i] != null) return String(row[i]).trim();
-  return "";
-}
-
-function toHttps(url){
-  url = String(url || "").trim();
-  if (!url) return "";
-  // If it's just a filename like 61xxx.jpg, it will 404. Reject it.
-  if (!/^https?:\/\//i.test(url)) return "";
-  return url.replace(/^http:\/\//i, "https://");
-}
-
-/* ---------- Load & map CSV ---------- */
-function loadMarketCSV(market){
-  var file = market.toLowerCase() + ".csv";
-  var url = "./" + file + "?v=" + Date.now(); // cache-bust
-  return fetch(url, { cache: "no-store" }).then(function(res){
-    if (!res.ok) throw new Error("CSV fetch failed: " + res.status);
-    return res.text();
-  }).then(function(text){
-    if (!String(text||"").trim()) throw new Error("CSV empty");
-    if (/<!doctype html|<html/i.test(text.slice(0,200))) throw new Error("CSV looks like HTML");
-    return text;
-  });
-}
-
-function csvToRawProducts(csvText, market){
-  var table = parseCSV(csvText);
-  if (!table || table.length < 2) return [];
-
-  var header = table[0];
-  var map = indexMap(header);
-
-  var out = [];
-  var seen = {};
-
-  for (var r=1;r<table.length;r++){
-    var row = table[r];
-
-    var m = pick(row, map, "market").toUpperCase();
-    if (m && m !== market) continue;
-
-    var status = pick(row, map, "status").toLowerCase();
-    if (status && status !== "active") continue;
-
-    var asin = pick(row, map, "asin");
-    var image = toHttps(pick(row, map, "image_url"));
-    var link = toHttps(pick(row, map, "link"));
-    var title = pick(row, map, "title");
-
-    if (!asin || !image) continue;
-
-    var k = asin.toLowerCase();
-    if (seen[k]) continue;
-    seen[k] = true;
-
-    out.push({ asin: asin, image: image, link: link, title: title });
-  }
-  return out;
-}
-
-/* ---------- Apply to existing renderer ---------- */
-function applyNewBase(list){
-  rawProductsBase = list;
-
-  // If your existing code builds derived products from rawProductsBase:
-  if (typeof rebuildDerivedProducts === "function") rebuildDerivedProducts();
-  if (typeof applyFiltersAndRender === "function") applyFiltersAndRender();
-  else if (typeof applyFilters === "function") applyFilters();
-  else if (typeof renderProducts === "function") renderProducts(list);
-}
-
-/* ---------- Market UI ---------- */
-function renderMarketUI(){
-  var box = qs("marketCenter");
-  if (!box) return;
-
-  var html = "";
-  for (var i=0;i<SUPPORTED_MARKETS.length;i++){
-    var m = SUPPORTED_MARKETS[i];
-    var checked = (m === CURRENT_MARKET) ? " checked" : "";
-    html += '<label class="m-opt"><input type="radio" name="mkt" value="'+m+'"'+checked+'><span>'+m+'</span></label>';
-  }
-  box.innerHTML = html;
-
-  var inputs = box.querySelectorAll('input[name="mkt"]');
-  for (var j=0;j<inputs.length;j++){
-    inputs[j].addEventListener("change", function(e){
-      if (this.checked){
-        switchMarket(this.value);
-      }
+    let products = rawProducts.map((p, index) => {
+      const broadCat = CATEGORY_MAP[p.category] || "Office & Daily Use";
+      const title = `Product #${index + 1} – ${broadCat} Pick`;
+      const hook =
+        `This pick is designed as a practical option in the ${broadCat.toLowerCase()} space for US shoppers, balancing everyday performance and value.`;
+      const details =
+        "Use this shortlist as a quick way to spot products that may deserve a closer look on the retailer's product page. Each card focuses on simple fit, features and everyday US use rather than chasing extreme specs.";
+      const approxPriceLabel = "Check live price on Amazon.com";
+      const amazonUrl = `https://${AMAZON_DOMAIN}/dp/${p.asin}/?tag=${AFFILIATE_TAG}`;
+      const reviewText =
+        `${title}\n\n` +
+        `This US-focused editorial note highlights key reasons why this item might be a good fit:\n` +
+        `• Everyday use: aimed at typical home or personal use rather than specialist scenarios.\n` +
+        `• Effort vs. benefit: chosen where setup, maintenance and day-to-day use feel reasonable for most people.\n` +
+        `• Value: not focused on being the cheapest, but instead offering a balanced feature set of features for the price.\n\n` +
+        `Always open the full product page on Amazon.com to check the latest details, compatibility notes and customer reviews before you decide.`;
+      return {
+        ...p,
+        broadCategory: broadCat,
+        title,
+        hook,
+        details,
+        approxPriceLabel,
+        amazonUrl,
+        reviewText
+      };
     });
-  }
-}
 
-function setStatus(text){
-  var el = qs("dataStatus");
-  if (el) el.textContent = text;
-}
+    
+    // ================== Multi-market + CSV live update ==================
+    const MARKET_LIST = ["US","UK","DE","FR","IT","ES","CA","JP"];
+    const MARKET_DOMAINS = {
+      US: "www.amazon.com",
+      UK: "www.amazon.co.uk",
+      DE: "www.amazon.de",
+      FR: "www.amazon.fr",
+      IT: "www.amazon.it",
+      ES: "www.amazon.es",
+      CA: "www.amazon.ca",
+      JP: "www.amazon.co.jp",
+    };
+    // Optional: per-market affiliate tags (if you have them). If CSV 'link' already includes tag, this is only fallback.
+    const AFFILIATE_TAGS = {
+      US: typeof AFFILIATE_TAG === "string" ? AFFILIATE_TAG : "us1987-20",
+      UK: "uktag-21",
+      DE: "detag-21",
+      FR: "frtag-21",
+      IT: "ittag-21",
+      ES: "estag-21",
+      CA: "catag-20",
+      JP: "jptag-22",
+    };
 
-/* ---------- Switch market ---------- */
-function switchMarket(market){
-  market = String(market || "").toUpperCase();
-  if (SUPPORTED_MARKETS.indexOf(market) < 0) return;
+    function getMarketFromUrl() {
+      const params = new URLSearchParams(location.search);
+      const m = (params.get("m") || "").toUpperCase();
+      return MARKET_LIST.includes(m) ? m : "US";
+    }
 
-  CURRENT_MARKET = market;
-  setMarketToURL(market);
-  renderMarketUI();
+    function setMarketToUrl(market) {
+      const params = new URLSearchParams(location.search);
+      params.set("m", market);
+      const newUrl = location.pathname + "?" + params.toString();
+      history.pushState({}, "", newUrl);
+    }
 
-  setStatus("Loading " + market + " data…");
+    function setActiveMarketUI(market) {
+      // badge
+      const badge = document.querySelector(".top-nav .badge");
+      if (badge) badge.textContent = market;
 
-  loadMarketCSV(market).then(function(csvText){
-    var list = csvToRawProducts(csvText, market);
-    if (!list.length) throw new Error("No valid products in " + market + ".csv");
-    applyNewBase(list);
-    setStatus("Live data: " + market + " • " + list.length + " items • " + new Date().toLocaleString());
-  }).catch(function(err){
-    console.warn("[market] fallback to default base:", err);
-    setStatus("Data load failed for " + market + " (fallback).");
-    // keep existing rawProductsBase as fallback
-  });
-}
+      // title text (keep UI, just change wording)
+      const titleEl = document.querySelector(".site-title");
+      if (titleEl) titleEl.textContent = `${market} Deep Review • Smart Picks ${market}`;
 
-/* ---------- init ---------- */
-document.addEventListener("DOMContentLoaded", function(){
-  renderMarketUI();
-  switchMarket(CURRENT_MARKET);
-  setInterval(function(){ switchMarket(CURRENT_MARKET); }, REFRESH_MS);
-});
-</script><div id="goog-gt-tt" class="VIpgJd-yAWNEb-L7lbkb skiptranslate" style="border-radius: 12px; margin: 0 0 0 -23px; padding: 0; font-family: &#39;Google Sans&#39;, Arial, sans-serif;" data-id=""><div id="goog-gt-vt" class="VIpgJd-yAWNEb-hvhgNd"><div class="VIpgJd-yAWNEb-hvhgNd-Ud7fr"><img src="./US Deep Review • Smart Picks US_files/24px.svg" width="24" height="24" alt=""><div class=" VIpgJd-yAWNEb-hvhgNd-IuizWc-i3jM8c " dir="ltr">原文</div></div><div class="VIpgJd-yAWNEb-hvhgNd-k77Iif"><div id="goog-gt-original-text" class="VIpgJd-yAWNEb-nVMfcd-fmcmS VIpgJd-yAWNEb-hvhgNd-axAV1"></div></div><div class="VIpgJd-yAWNEb-hvhgNd-N7Eqid ltr"><div class="VIpgJd-yAWNEb-hvhgNd-N7Eqid-B7I4Od ltr" dir="ltr"><div class="VIpgJd-yAWNEb-hvhgNd-UTujCb">请对此翻译评分</div><div class="VIpgJd-yAWNEb-hvhgNd-eO9mKe">您的反馈将用于改进谷歌翻译</div></div><div class="VIpgJd-yAWNEb-hvhgNd-xgov5 ltr"><button id="goog-gt-thumbUpButton" type="button" class="VIpgJd-yAWNEb-hvhgNd-bgm6sf" title="翻译质量很棒" aria-label="翻译质量很棒" aria-pressed="false"><span id="goog-gt-thumbUpIcon"><svg width="24" height="24" viewBox="0 0 24 24" focusable="false" class="VIpgJd-yAWNEb-hvhgNd-THI6Vb NMm5M"><path d="M21 7h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 0S7.08 6.85 7 7H2v13h16c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73V9c0-1.1-.9-2-2-2zM7 18H4V9h3v9zm14-7l-3 7H9V8l4.34-4.34L12 9h9v2z"></path></svg></span><span id="goog-gt-thumbUpIconFilled"><svg width="24" height="24" viewBox="0 0 24 24" focusable="false" class="VIpgJd-yAWNEb-hvhgNd-THI6Vb NMm5M"><path d="M21 7h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 0S7.08 6.85 7 7v13h11c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73V9c0-1.1-.9-2-2-2zM5 7H1v13h4V7z"></path></svg></span></button><button id="goog-gt-thumbDownButton" type="button" class="VIpgJd-yAWNEb-hvhgNd-bgm6sf" title="翻译质量很差" aria-label="翻译质量很差" aria-pressed="false"><span id="goog-gt-thumbDownIcon"><svg width="24" height="24" viewBox="0 0 24 24" focusable="false" class="VIpgJd-yAWNEb-hvhgNd-THI6Vb NMm5M"><path d="M3 17h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 24s7.09-6.85 7.17-7h5V4H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2zM17 6h3v9h-3V6zM3 13l3-7h9v10l-4.34 4.34L12 15H3v-2z"></path></svg></span><span id="goog-gt-thumbDownIconFilled"><svg width="24" height="24" viewBox="0 0 24 24" focusable="false" class="VIpgJd-yAWNEb-hvhgNd-THI6Vb NMm5M"><path d="M3 17h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 24s7.09-6.85 7.17-7V4H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2zm16 0h4V4h-4v13z"></path></svg></span></button></div></div><div id="goog-gt-votingHiddenPane" class="VIpgJd-yAWNEb-hvhgNd-aXYTce"><form id="goog-gt-votingForm" action="https://translate.googleapis.com/translate_voting?client=te_lib" method="post" target="votingFrame" class="VIpgJd-yAWNEb-hvhgNd-aXYTce"><input type="text" name="sl" id="goog-gt-votingInputSrcLang"><input type="text" name="tl" id="goog-gt-votingInputTrgLang"><input type="text" name="query" id="goog-gt-votingInputSrcText"><input type="text" name="gtrans" id="goog-gt-votingInputTrgText"><input type="text" name="vote" id="goog-gt-votingInputVote"></form><iframe name="votingFrame" frameborder="0" src="./US Deep Review • Smart Picks US_files/saved_resource.html"></iframe></div></div></div>
+      // market buttons active state
+      document.querySelectorAll(".nav-btn.market").forEach((btn) => {
+        btn.classList.toggle("active", btn.dataset.market === market);
+      });
+    }
+
+    // Rebuild derived arrays after rawProductsBase changes
+    function rebuildDerivedProducts(market) {
+      rawProducts = rawProductsBase.map((p, index) => ({
+        id: index + 1,
+        asin: p.asin,
+        image: p.image,
+        link: p.link || "",
+        title: p.title || "",
+        category: baseCategories[index % baseCategories.length]
+      }));
+
+      products = rawProducts.map((p, index) => {
+        const broadCat = CATEGORY_MAP[p.category] || "Office & Daily Use";
+        const title = p.title || `Product #${index + 1} – ${broadCat} Pick`;
+        const hook =
+          `This pick is designed as a practical option in the ${broadCat.toLowerCase()} space for ${market} shoppers, balancing everyday performance and value.`;
+        const details =
+          "Use this shortlist as a quick way to spot products that may deserve a closer look on the retailer's product page. Each card focuses on simple fit, features and everyday use rather than chasing extreme specs.";
+        const approxPriceLabel = "Check live price on Amazon.com";
+
+        // Use CSV link if present; else fallback
+        const domain = MARKET_DOMAINS[market] || MARKET_DOMAINS.US;
+        const tag = AFFILIATE_TAGS[market] || AFFILIATE_TAGS.US;
+        const amazonUrl = (p.link && String(p.link).trim())
+          ? String(p.link).trim()
+          : `https://${domain}/dp/${p.asin}/?tag=${encodeURIComponent(tag)}`;
+
+        const reviewText =
+          `${title}\n\n` +
+          `This ${market}-focused editorial note highlights key reasons why this item might be a good fit:\n` +
+          `• Everyday use: aimed at typical home or personal use rather than specialist scenarios.\n` +
+          `• Effort vs. benefit: chosen where setup, maintenance and day-to-day use feel reasonable for most people.\n` +
+          `• Value: a balanced feature set for the price.\n\n` +
+          `Always open the full product page on Amazon to check the latest details and reviews before you decide.`;
+
+        return {
+          ...p,
+          broadCategory: broadCat,
+          title,
+          hook,
+          details,
+          approxPriceLabel,
+          amazonUrl,
+          reviewText
+        };
+      });
+    }
+
+    // Robust CSV parsing (handles quoted commas)
+    function parseCSV(text) {
+      const rows = [];
+      let row = [];
+      let cur = "";
+      let inQuotes = false;
+      for (let i = 0; i < text.length; i++) {
+        const ch = text[i];
+        const next = text[i + 1];
+        if (inQuotes) {
+          if (ch === '"' && next === '"') { cur += '"'; i++; }
+          else if (ch === '"') inQuotes = false;
+          else cur += ch;
+        } else {
+          if (ch === '"') inQuotes = true;
+          else if (ch === ",") { row.push(cur); cur = ""; }
+          else if (ch === "\n") { row.push(cur); rows.push(row); row = []; cur = ""; }
+          else if (ch !== "\r") cur += ch;
+        }
+      }
+      if (cur.length || row.length) { row.push(cur); rows.push(row); }
+      return rows;
+    }
+
+    function buildIndexMap(headerRow) {
+      const map = new Map();
+      headerRow.forEach((h, i) => {
+        const key = String(h || "").trim().toLowerCase();
+        if (key) map.set(key, i);
+      });
+      return map;
+    }
+
+    function pick(row, idxMap, ...keys) {
+      for (const k of keys) {
+        const i = idxMap.get(String(k).toLowerCase());
+        if (i !== undefined && row[i] !== undefined) return String(row[i]).trim();
+      }
+      return "";
+    }
+
+    async function loadMarketCSV(market) {
+      const file = `${market.toLowerCase()}.csv`;
+      const url = `./${file}?v=${Date.now()}`;
+      const res = await fetch(url, { cache: "no-store" });
+      if (!res.ok) throw new Error(`Fetch ${file} failed: ${res.status}`);
+      const text = await res.text();
+      if (/<!doctype html|<html/i.test(text.slice(0, 200))) throw new Error("CSV looks like HTML");
+      const table = parseCSV(text);
+      if (table.length < 2) throw new Error("CSV empty");
+
+      const idxMap = buildIndexMap(table[0]);
+
+      const out = [];
+      for (let r = 1; r < table.length; r++) {
+        const row = table[r];
+        const rowMarket = pick(row, idxMap, "market");
+        if (rowMarket && rowMarket.toUpperCase() !== market) continue;
+
+        const status = pick(row, idxMap, "status");
+        if (status && !["active","1","true","enabled","enable","yes","on"].includes(status.toLowerCase())) continue;
+
+        const asin = pick(row, idxMap, "asin");
+        const image = pick(row, idxMap, "image_url", "image", "img", "imageurl");
+        const link = pick(row, idxMap, "link", "url");
+        const title = pick(row, idxMap, "title", "name");
+
+        if (!asin || !image) continue;
+        out.push({ asin, image, link, title });
+      }
+
+      // de-dup by asin
+      const seen = new Set();
+      return out.filter(p => {
+        const k = p.asin.toLowerCase();
+        if (seen.has(k)) return false;
+        seen.add(k);
+        return true;
+      });
+    }
+
+    async function refreshMarket(market, reason) {
+      try {
+        if (dataStatusEl) dataStatusEl.textContent = `Updating (${market})…`;
+        const list = await loadMarketCSV(market);
+        if (!list.length) throw new Error("No products after filtering");
+
+        rawProductsBase = list; // overwrite base
+        rebuildDerivedProducts(market);
+        applyFilters();
+        if (dataStatusEl) dataStatusEl.textContent = `Live data (${market}) • ${new Date().toLocaleString()}`;
+      } catch (e) {
+        console.warn("[market refresh] fallback:", e);
+        rebuildDerivedProducts(market);
+        applyFilters();
+        if (dataStatusEl) dataStatusEl.textContent = `Fallback data (${market})`;
+      }
+    }
+    // ================== End Multi-market ==================
+const gridEl = document.getElementById("productGrid");
+    const countEl = document.getElementById("productCount");
+    const searchInput = document.getElementById("searchInput");
+    const searchBtn = document.getElementById("searchBtn");
+    const chipsContainer = document.getElementById("categoryChips");
+
+    const modalBackdrop = document.getElementById("reviewModalBackdrop");
+    const modalTitle = document.getElementById("reviewModalTitle");
+    const modalBody = document.getElementById("reviewModalBody");
+    const modalAmazonLink = document.getElementById("reviewModalAmazonLink");
+    const modalClose = document.getElementById("reviewModalClose");
+    const modalDismiss = document.getElementById("reviewModalDismiss");
+
+    let activeCategory = "All picks";
+    let searchTerm = "";
+
+    function renderProducts(list) {
+      gridEl.innerHTML = "";
+      if (!list.length) {
+        gridEl.innerHTML =
+          '<div style="font-size:0.85rem;color:#6b7280;padding:10px 4px;">No products match your current filters. Try clearing the search or choosing “All picks”.</div>';
+      } else {
+        list.forEach((p) => {
+          const card = document.createElement("article");
+          card.className = "product-card";
+          card.innerHTML = `
+            <div class="product-card_media">
+              <img src="${p.image}" alt="${p.title}" loading="lazy" onerror="this.style.display='none';this.closest('.product-card_media').classList.add('img-broken');" />
+            </div>
+            <div class="product-card_body">
+              <div class="product-card_meta">
+                <span class="meta-cat">${p.broadCategory}</span>
+                <span class="meta-asin">ASIN: ${p.asin}</span>
+              </div>
+              <h3 class="product-card_title">${p.title}</h3>
+              <p class="product-card_hook">${p.hook}</p>
+              <p class="product-card_desc">${p.details}</p>
+            </div>
+            <div class="product-card_footer">
+              <div class="product-card_price">${p.approxPriceLabel}</div>
+              <div class="product-card_actions">
+                <button class="btn btn-secondary" data-action="review" data-asin="${p.asin}">
+                  Read review
+                </button>
+                <a class="btn btn-primary" href="${p.amazonUrl}" target="_blank" rel="nofollow noopener sponsored">
+                  View details
+                </a>
+              </div>
+            </div>
+          `;
+          gridEl.appendChild(card);
+        });
+      }
+      if (countEl) {
+        countEl.textContent = `Showing ${list.length} products`;
+      }
+    }
+
+    function getFilteredProducts() {
+      const term = searchTerm.trim().toLowerCase();
+      return products.filter((p) => {
+        const matchesCategory =
+          activeCategory === "All picks" || p.broadCategory === activeCategory;
+        const haystack = `${p.title} ${p.asin} ${p.broadCategory} ${p.category}`.toLowerCase();
+        const matchesSearch = !term || haystack.includes(term);
+        return matchesCategory && matchesSearch;
+      });
+    }
+
+    function applyFilters() { renderProducts(getFilteredProducts()); }
+
+    function setActiveChip(categoryLabel) {
+      activeCategory = categoryLabel;
+      const chips = chipsContainer.querySelectorAll(".chip");
+      chips.forEach((chip) => {
+        chip.classList.toggle("active", chip.dataset.category === categoryLabel);
+      });
+      applyFilters();
+    }
+
+    chipsContainer.addEventListener("click", (e) => {
+      const btn = e.target.closest(".chip");
+      if (!btn) return;
+      const cat = btn.dataset.category;
+      if (cat) setActiveChip(cat);
+    });
+
+    function handleSearch() {
+      searchTerm = searchInput.value || "";
+      applyFilters();
+    }
+
+    searchBtn.addEventListener("click", handleSearch);
+    searchInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") handleSearch();
+    });
+
+    gridEl.addEventListener("click", (e) => {
+      const btn = e.target.closest("button[data-action='review']");
+      if (!btn) return;
+      const asin = btn.dataset.asin;
+      const product = products.find((p) => p.asin === asin);
+      if (product) openReviewModal(product);
+    });
+
+    function openReviewModal(product) {
+      modalTitle.textContent = product.title + " (Short review)";
+      modalBody.textContent = product.reviewText;
+      modalAmazonLink.href = product.amazonUrl;
+      modalBackdrop.classList.add("visible");
+      modalBackdrop.setAttribute("aria-hidden", "false");
+    }
+
+    function closeReviewModal() {
+      modalBackdrop.classList.remove("visible");
+      modalBackdrop.setAttribute("aria-hidden", "true");
+    }
+
+    modalClose.addEventListener("click", closeReviewModal);
+    modalDismiss.addEventListener("click", closeReviewModal);
+    modalBackdrop.addEventListener("click", (e) => {
+      if (e.target === modalBackdrop) closeReviewModal();
+    });
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") closeReviewModal();
+    });
+
+    
+    // ========= Multi-market init =========
+    let currentMarket = getMarketFromUrl();
+    setActiveMarketUI(currentMarket);
+    rebuildDerivedProducts(currentMarket);
+
+    // initial render via existing filter pipeline (if any)
+    if (typeof applyFilters === "function") applyFilters();
+    else renderProducts(products);
+
+    // bind market buttons
+    document.querySelectorAll(".nav-btn.market").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const m = (btn.dataset.market || "").toUpperCase();
+        if (!m) return;
+        currentMarket = m;
+        setMarketToUrl(currentMarket);
+        setActiveMarketUI(currentMarket);
+        refreshMarket(currentMarket, "switch");
+      });
+    });
+
+    // first live load + periodic refresh
+    refreshMarket(currentMarket, "boot");
+    setInterval(() => refreshMarket(currentMarket, "timer"), REFRESH_MS);
+
+    // handle back/forward
+    window.addEventListener("popstate", () => {
+      currentMarket = getMarketFromUrl();
+      setActiveMarketUI(currentMarket);
+      refreshMarket(currentMarket, "popstate");
+    });
+
+  </script><div id="goog-gt-tt" class="VIpgJd-yAWNEb-L7lbkb skiptranslate" style="border-radius: 12px; margin: 0 0 0 -23px; padding: 0; font-family: &#39;Google Sans&#39;, Arial, sans-serif;" data-id=""><div id="goog-gt-vt" class="VIpgJd-yAWNEb-hvhgNd"><div class="VIpgJd-yAWNEb-hvhgNd-Ud7fr"><img src="./US Deep Review • Smart Picks US_files/24px.svg" width="24" height="24" alt=""><div class=" VIpgJd-yAWNEb-hvhgNd-IuizWc-i3jM8c " dir="ltr">原文</div></div><div class="VIpgJd-yAWNEb-hvhgNd-k77Iif"><div id="goog-gt-original-text" class="VIpgJd-yAWNEb-nVMfcd-fmcmS VIpgJd-yAWNEb-hvhgNd-axAV1"></div></div><div class="VIpgJd-yAWNEb-hvhgNd-N7Eqid ltr"><div class="VIpgJd-yAWNEb-hvhgNd-N7Eqid-B7I4Od ltr" dir="ltr"><div class="VIpgJd-yAWNEb-hvhgNd-UTujCb">请对此翻译评分</div><div class="VIpgJd-yAWNEb-hvhgNd-eO9mKe">您的反馈将用于改进谷歌翻译</div></div><div class="VIpgJd-yAWNEb-hvhgNd-xgov5 ltr"><button id="goog-gt-thumbUpButton" type="button" class="VIpgJd-yAWNEb-hvhgNd-bgm6sf" title="翻译质量很棒" aria-label="翻译质量很棒" aria-pressed="false"><span id="goog-gt-thumbUpIcon"><svg width="24" height="24" viewBox="0 0 24 24" focusable="false" class="VIpgJd-yAWNEb-hvhgNd-THI6Vb NMm5M"><path d="M21 7h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 0S7.08 6.85 7 7H2v13h16c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73V9c0-1.1-.9-2-2-2zM7 18H4V9h3v9zm14-7l-3 7H9V8l4.34-4.34L12 9h9v2z"></path></svg></span><span id="goog-gt-thumbUpIconFilled"><svg width="24" height="24" viewBox="0 0 24 24" focusable="false" class="VIpgJd-yAWNEb-hvhgNd-THI6Vb NMm5M"><path d="M21 7h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 0S7.08 6.85 7 7v13h11c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73V9c0-1.1-.9-2-2-2zM5 7H1v13h4V7z"></path></svg></span></button><button id="goog-gt-thumbDownButton" type="button" class="VIpgJd-yAWNEb-hvhgNd-bgm6sf" title="翻译质量很差" aria-label="翻译质量很差" aria-pressed="false"><span id="goog-gt-thumbDownIcon"><svg width="24" height="24" viewBox="0 0 24 24" focusable="false" class="VIpgJd-yAWNEb-hvhgNd-THI6Vb NMm5M"><path d="M3 17h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 24s7.09-6.85 7.17-7h5V4H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2zM17 6h3v9h-3V6zM3 13l3-7h9v10l-4.34 4.34L12 15H3v-2z"></path></svg></span><span id="goog-gt-thumbDownIconFilled"><svg width="24" height="24" viewBox="0 0 24 24" focusable="false" class="VIpgJd-yAWNEb-hvhgNd-THI6Vb NMm5M"><path d="M3 17h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 24s7.09-6.85 7.17-7V4H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2zm16 0h4V4h-4v13z"></path></svg></span></button></div></div><div id="goog-gt-votingHiddenPane" class="VIpgJd-yAWNEb-hvhgNd-aXYTce"><form id="goog-gt-votingForm" action="https://translate.googleapis.com/translate_voting?client=te_lib" method="post" target="votingFrame" class="VIpgJd-yAWNEb-hvhgNd-aXYTce"><input type="text" name="sl" id="goog-gt-votingInputSrcLang"><input type="text" name="tl" id="goog-gt-votingInputTrgLang"><input type="text" name="query" id="goog-gt-votingInputSrcText"><input type="text" name="gtrans" id="goog-gt-votingInputTrgText"><input type="text" name="vote" id="goog-gt-votingInputVote"></form><iframe name="votingFrame" frameborder="0" src="./US Deep Review • Smart Picks US_files/saved_resource.html"></iframe></div></div></div>
 
 
 </body><script>
