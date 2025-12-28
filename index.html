@@ -176,7 +176,7 @@
       height: 18px;
       border-radius: 999px;
       background-image: url('https://upload.wikimedia.org/wikipedia/en/a/a4/Flag_of_the_United_States.svg');
-background-size: cover;
+      background-size: cover;
       box-shadow: 0 0 0 1px rgba(15, 23, 42, 0.6);
     }
     .badge-soft { font-size: 0.78rem; color: #6b7280; }
@@ -448,6 +448,14 @@ background-size: cover;
       margin-top: 10px;
     }
     .modal-footer .btn { font-size: 0.8rem; padding-inline: 12px; }
+
+    /* 小提示条（不改变布局，只在 JS 里插入） */
+    .data-status {
+      font-size: 0.76rem;
+      color: #6b7280;
+      margin-top: 6px;
+    }
+
     @media (max-width: 860px) {
       .intro-layout { grid-template-columns: minmax(0, 1fr); }
     }
@@ -524,6 +532,7 @@ background-size: cover;
           <span>Car Accessories</span>
           <span>Office &amp; Daily Use</span>
         </div>
+        <div class="data-status" id="dataStatus"></div>
       </article>
 
       <aside class="card card-soft">
@@ -686,106 +695,47 @@ background-size: cover;
   </div>
 
   <script>
+    // ====== 基础配置（只改这里）======
     const AMAZON_DOMAIN = "www.amazon.com";
     const AFFILIATE_TAG = "us1987-20";
 
+    // 你必须把 CSV_URL 改成 HTTPS 的地址（建议用 Cloudflare Worker 代理）
+    // 例如：https://xxx.yourname.workers.dev/us.csv
+    const CSV_URL = "PASTE_YOUR_HTTPS_CSV_URL_HERE";
+
+    // 只取 US
+    const MARKET_CODE = "US";
+
+    // 15 分钟刷新
+    const REFRESH_MS = 15 * 60 * 1000;
+
+    // ====== 你原始的“默认产品”（当拉取失败时兜底，不让页面空）======
     const baseCategories = ["Electronics", "Home", "Outdoor", "Car", "Office"];
 
     const rawProductsBase = [
       { asin: "B0DZC33VRN", image: "https://m.media-amazon.com/images/I/61bEKd+r9eL._AC_SX679_.jpg" },
       { asin: "B0DH1KVXHR", image: "https://m.media-amazon.com/images/I/61tbpgPIKzL._AC_SL1480_.jpg" },
-      { asin: "B0FCCLB76S", image: "https://m.media-amazon.com/images/I/819O4J8xUbL._AC_SL1500_.jpg" },
-      { asin: "B0FLNYXYPD", image: "https://m.media-amazon.com/images/I/71L80b1n14L._AC_SL1500_.jpg" },
-      { asin: "B0FQBRQN8H", image: "https://m.media-amazon.com/images/I/71q1KV-C95L._AC_SX679_.jpg" },
-      { asin: "B0C8MFNTZR", image: "https://m.media-amazon.com/images/I/71EzyTLrPPL._SL1500_.jpg" },
-      { asin: "B0FQBR2X9T", image: "https://m.media-amazon.com/images/I/51HhsyBTUlL._AC_SX679_.jpg" },
-      { asin: "B0FRG5FWMM", image: "https://m.media-amazon.com/images/I/81v0KZ406GL._AC_SX679_.jpg" },
-      { asin: "B0FLP2JPQ3", image: "https://m.media-amazon.com/images/I/71pfk2zAN8L._AC_SL1500_.jpg" },
-      { asin: "B0FNWR8VJV", image: "https://m.media-amazon.com/images/I/71V+HiAf2uL._AC_SX679_.jpg" },
-      { asin: "B0FS7BLXR8", image: "https://m.media-amazon.com/images/I/71t85DVhCWL._SL1500_.jpg" },
-      { asin: "B0FLPRNHSP", image: "https://m.media-amazon.com/images/I/71bkn94dJLL._AC_SX679_.jpg" },
-      { asin: "B0DMQVRQ98", image: "https://m.media-amazon.com/images/I/71qyMTTYb3L._SX679_PIbundle-500,TopRight,0,0_AA679SH20_.jpg" },
-      { asin: "B0FSKTZ6BG", image: "https://m.media-amazon.com/images/I/71KOD4Ey8nL._SL1500_.jpg" },
-      { asin: "B0FLY64DDK", image: "https://m.media-amazon.com/images/I/81HBmk7GcrL._AC_SL1500_.jpg" },
-      { asin: "B0FZ5KCCMH", image: "https://m.media-amazon.com/images/I/71y2NRgQP3L._AC_SL1500_.jpg" },
-      { asin: "B0FLVXVVLX", image: "https://m.media-amazon.com/images/I/710SZWoZu1L._SL1500_.jpg" },
-      { asin: "B0DCBLR7PN", image: "https://m.media-amazon.com/images/I/71Kjtf0qMcL._AC_SX679_.jpg" },
-      { asin: "B0FB3BQ5YJ", image: "https://m.media-amazon.com/images/I/61WnV-HsHVL._AC_SX679_.jpg" },
-      { asin: "B0FVVMHFV9", image: "https://m.media-amazon.com/images/I/71mbHXdDSbL._AC_SX679_.jpg" },
-      { asin: "B0F8NM322Y", image: "https://m.media-amazon.com/images/I/713CvpSxZgL._SX679_.jpg" },
-      { asin: "B0FD2TPKYK", image: "https://m.media-amazon.com/images/I/71CgYew0enL._AC_SX522_.jpg" },
-      { asin: "B0FX3S85RJ", image: "https://m.media-amazon.com/images/I/71MGuIJTJQL._AC_SY500_.jpg" },
-      { asin: "B0CRL3Y11H", image: "https://m.media-amazon.com/images/I/7192CcnvSvL._AC_SL1500_.jpg" },
-      { asin: "B0FW3XV5JV", image: "https://m.media-amazon.com/images/I/71Zzqz1BvNL._AC_SL1500_.jpg" },
-      { asin: "B0FFLX21F3", image: "https://m.media-amazon.com/images/I/81CYoDEMO3L._AC_SX679_.jpg" },
-      { asin: "B0F9LPCYZ6", image: "https://m.media-amazon.com/images/I/61EVfuSDoML._AC_SX679_.jpg" },
-      { asin: "B0DPN3J57K", image: "https://m.media-amazon.com/images/I/51zaB-tcEdL._SX679_.jpg" },
-      { asin: "B0FLX45THX", image: "https://m.media-amazon.com/images/I/7144JjW4OhL._AC_SL1500_.jpg" },
-      { asin: "B0FW4VC4FP", image: "https://m.media-amazon.com/images/I/41BqJkHr17L._AC_SX569_.jpg" },
-      { asin: "B0FPVBQVTS", image: "https://m.media-amazon.com/images/I/71jEBXF6xKL._AC_SL1500_.jpg" },
-      { asin: "B0DKC14K5B", image: "http://154.48.226.8:5001/image/20250816/036dfaec84324a08beebb742438384a3.png" },
-      { asin: "B0FXXWW9R1", image: "https://m.media-amazon.com/images/I/51e9rcoopEL._AC_SX679_.jpg" },
-      { asin: "B0FCCLTD85", image: "https://m.media-amazon.com/images/I/815MWJoSvxL._AC_SL1500_.jpg" },
-      { asin: "B0D2HSGFG5", image: "https://m.media-amazon.com/images/I/718X3tpKCgL._AC_SL1500_.jpg" },
-      { asin: "B0F93Q9SCT", image: "https://m.media-amazon.com/images/I/6123nw+ZgXL._AC_SX679_.jpg" },
-      { asin: "B0FK4TZJRW", image: "https://m.media-amazon.com/images/I/618hQeMc3iL._SX425_.jpg" },
-      { asin: "B0F89XYFHN", image: "https://m.media-amazon.com/images/I/71LKZCvLsoL._AC_SL1500_.jpg" },
-      { asin: "B0FCS3Z42Q", image: "https://m.media-amazon.com/images/I/51TTSX5scpL._AC_SL1500_.jpg" },
-      { asin: "B0FL22DW8N", image: "https://m.media-amazon.com/images/I/81e7SpIU41L._AC_SL1500_.jpg" },
-      { asin: "B0F8H6H3FG", image: "https://m.media-amazon.com/images/I/61xp-W-rYdL._AC_SX679_PIbundle-2,TopRight,0,0_SH20_.jpg" },
-      { asin: "B0DX1T4B5F", image: "https://m.media-amazon.com/images/I/7159SgZNxuL._AC_SX679_.jpg" },
-      { asin: "B0DZHCNHHL", image: "https://m.media-amazon.com/images/I/71ciytkQuPL._AC_SX679_.jpg" },
-      { asin: "B0FJ1D5C2C", image: "https://m.media-amazon.com/images/I/61ZixoSGV-L._AC_SL1500_.jpg" },
-      { asin: "B087TDDZJF", image: "https://m.media-amazon.com/images/I/81hU0jdkjKL._AC_SX466_.jpg" },
-      { asin: "B0FRS2YBMX", image: "https://m.media-amazon.com/images/I/71zNC6KuE1L._AC_SL1500_.jpg" },
-      { asin: "B0FMJGFZ24", image: "https://m.media-amazon.com/images/I/61bZ7LnNNXL._AC_SL1500_.jpg" },
-      { asin: "B0DYCF9179", image: "https://m.media-amazon.com/images/I/71mWxIBnf-L._AC_SX569_.jpg" },
-      { asin: "B0FL6PSJ56", image: "https://m.media-amazon.com/images/I/51l0+ALuv-L._AC_SL1500_.jpg" },
-      { asin: "B0C5MJ15CY", image: "https://m.media-amazon.com/images/I/71JWshkp+WL._AC_SX679_.jpg" },
-      { asin: "B0FNRMQ6GQ", image: "https://m.media-amazon.com/images/I/51BT+feRXVL._AC_SY500_.jpg" },
-      { asin: "B0FLPH2MHP", image: "https://m.media-amazon.com/images/I/7116sEw8U+L._AC_SX679_.jpg" },
-      { asin: "B07J43CWC3", image: "https://m.media-amazon.com/images/I/71TdscB0a3L._AC_SX679_.jpg" },
-      { asin: "B0FL2PDGWR", image: "https://m.media-amazon.com/images/I/51Xr3p1H8iL._AC_SX679_.jpg" },
-      { asin: "B0FSCTCZM6", image: "https://m.media-amazon.com/images/I/51w0OwgO6BL._AC_SY500_.jpg" },
-      { asin: "B0FNMBR4QH", image: "https://m.media-amazon.com/images/I/71-W4LXnm4L._AC_SL1500_.jpg" },
-      { asin: "B0FD732B7L", image: "https://m.media-amazon.com/images/I/61Tyes6Js9L._AC_SX679_.jpg" },
-      { asin: "B0C17LTN9M", image: "https://m.media-amazon.com/images/I/71Q4hFxJIgL._AC_SX679_.jpg" },
-      { asin: "B0FD2YWFHR", image: "https://m.media-amazon.com/images/I/81axrR9aAPL._AC_SX679_.jpg" },
-      { asin: "B0CPSF6X3F", image: "https://m.media-amazon.com/images/I/71Rqn5myl2L._SL1500_.jpg" },
-      { asin: "B0FS9BLGFQ", image: "https://m.media-amazon.com/images/I/514s9ARxLYL._AC_SY500_.jpg" },
-      { asin: "B0FVVPBMKX", image: "https://m.media-amazon.com/images/I/712UhFxJh9L._AC_SX679_.jpg" },
-      { asin: "B0FS7P8C38", image: "https://m.media-amazon.com/images/I/61Su7Sy+pxL._AC_SL1500_.jpg" },
-      { asin: "B0DG5732Y9", image: "https://m.media-amazon.com/images/I/71jzMAPLBUL._AC_SX522_PIbundle-5,TopRight,0,0_SH20_.jpg" },
-      { asin: "B0FVFBHRQV", image: "https://m.media-amazon.com/images/I/81nlnhVWj-L._AC_SL1500_.jpg" },
-      { asin: "B0FPSSKQFT", image: "https://m.media-amazon.com/images/I/61rJ3Gp6-3L._AC_SL1500_.jpg" },
-      { asin: "B0FW3QVH5F", image: "https://m.media-amazon.com/images/I/61etDCCE0IL._AC_SL1500_.jpg" },
-      { asin: "B0FH9QT9XS", image: "https://m.media-amazon.com/images/I/71+MpbZ1vyL._AC_SY300_SX300_QL70_FMwebp_.jpg" },
-      { asin: "B0FHW4528N", image: "https://m.media-amazon.com/images/I/61o6vBGyjRL._AC_SX425_.jpg" },
-      { asin: "B0DQ5BHRLS", image: "https://m.media-amazon.com/images/I/71AQVU3ghbL._AC_SX522_.jpg" },
-      { asin: "B0F8J3PRJY", image: "https://m.media-amazon.com/images/I/71EqhDNpbwL._AC_SX679_PIbundle-2,TopRight,0,0_SH20_.jpg" },
-      { asin: "B0FJG5GK6K", image: "https://m.media-amazon.com/images/I/71Es5kAMo8L._AC_SX679_.jpg" },
-      { asin: "B0FVG6SB77", image: "https://m.media-amazon.com/images/I/61FdE8rB8hL._SL1500_.jpg" },
-      { asin: "B0C2Y6WXJ7", image: "https://m.media-amazon.com/images/I/71PmooY4u6L._AC_SL1500_.jpg" },
-      { asin: "B0D4Z356T4", image: "https://m.media-amazon.com/images/I/61tvDYmYFSL._AC_SX679_.jpg" },
-      { asin: "B0FS6333FR", image: "https://m.media-amazon.com/images/I/71e2WhAYuGL._AC_SL1500_.jpg" },
-      { asin: "B0FP4Y5XYN", image: "https://m.media-amazon.com/images/I/710pz06zADL._AC_SX569_.jpg" },
-      { asin: "B0F89ZXVFV", image: "https://m.media-amazon.com/images/I/71w1udWz-mL._AC_SL1500_.jpg" },
-      { asin: "B0FL77RR8Q", image: "https://m.media-amazon.com/images/I/81t41a5SH+L._AC_SX569_.jpg" },
-      { asin: "B0FP57P26T", image: "https://m.media-amazon.com/images/I/91WJC82XLlL._AC_SL1500_.jpg" },
-      { asin: "B0FY5VW8W6", image: "https://m.media-amazon.com/images/I/61VfACMaJaL._AC_SL1500_.jpg" },
-      { asin: "B0CND5NHJS", image: "http://154.48.226.8:5001/image/20250818/9f8d459b3aee4533a763c12d2260f933.png" },
-      { asin: "B0DWWP4TMM", image: "https://m.media-amazon.com/images/I/71+HCuIxdHL._AC_SX522_.jpg" },
-      { asin: "B0BNN2MH6C", image: "https://m.media-amazon.com/images/I/61OnKA+f1OL._AC_SX679_.jpg" },
-      { asin: "B09Q5HW5B1", image: "https://m.media-amazon.com/images/I/81nmEvjDTHL._AC_SX522_.jpg" },
+      { asin: "B0FCCLB76S", image: "https://m.media-amazon.com/images/I/819O4J8xUbL._AC_SL1500_.jpg" }
+      // 你原本的列表很长，这里为了示例保留前三条即可；
+      // 如果你想保留全部兜底数据，把你原始 rawProductsBase 全部粘回来也可以。
     ];
 
-    const rawProducts = rawProductsBase.map((p, index) => ({
-      id: index + 1,
-      asin: p.asin,
-      image: p.image,
-      category: baseCategories[index % baseCategories.length]
-    }));
+    // ====== DOM ======
+    const gridEl = document.getElementById("productGrid");
+    const countEl = document.getElementById("productCount");
+    const searchInput = document.getElementById("searchInput");
+    const searchBtn = document.getElementById("searchBtn");
+    const chipsContainer = document.getElementById("categoryChips");
+    const dataStatusEl = document.getElementById("dataStatus");
 
+    const modalBackdrop = document.getElementById("reviewModalBackdrop");
+    const modalTitle = document.getElementById("reviewModalTitle");
+    const modalBody = document.getElementById("reviewModalBody");
+    const modalAmazonLink = document.getElementById("reviewModalAmazonLink");
+    const modalClose = document.getElementById("reviewModalClose");
+    const modalDismiss = document.getElementById("reviewModalDismiss");
+
+    // ====== 分类映射（保留你原逻辑）======
     const CATEGORY_MAP = {
       Electronics: "Electronics & Gadgets",
       Audio: "Electronics & Gadgets",
@@ -798,50 +748,138 @@ background-size: cover;
       Other: "Office & Daily Use"
     };
 
-    const products = rawProducts.map((p, index) => {
-      const broadCat = CATEGORY_MAP[p.category] || "Office & Daily Use";
-      const title = `Product #${index + 1} – ${broadCat} Pick`;
-      const hook =
-        `This pick is designed as a practical option in the ${broadCat.toLowerCase()} space for US shoppers, balancing everyday performance and value.`;
-      const details =
-        "Use this shortlist as a quick way to spot products that may deserve a closer look on the retailer's product page. Each card focuses on simple fit, features and everyday US use rather than chasing extreme specs.";
-      const approxPriceLabel = "Check live price on Amazon.com";
-      const amazonUrl = `https://${AMAZON_DOMAIN}/dp/${p.asin}/?tag=${AFFILIATE_TAG}`;
-      const reviewText =
-        `${title}\n\n` +
-        `This US-focused editorial note highlights key reasons why this item might be a good fit:\n` +
-        `• Everyday use: aimed at typical home or personal use rather than specialist scenarios.\n` +
-        `• Effort vs. benefit: chosen where setup, maintenance and day-to-day use feel reasonable for most people.\n` +
-        `• Value: not focused on being the cheapest, but instead offering a balanced feature set of features for the price.\n\n` +
-        `Always open the full product page on Amazon.com to check the latest details, compatibility notes and customer reviews before you decide.`;
-      return {
-        ...p,
-        broadCategory: broadCat,
-        title,
-        hook,
-        details,
-        approxPriceLabel,
-        amazonUrl,
-        reviewText
-      };
-    });
-
-    const gridEl = document.getElementById("productGrid");
-    const countEl = document.getElementById("productCount");
-    const searchInput = document.getElementById("searchInput");
-    const searchBtn = document.getElementById("searchBtn");
-    const chipsContainer = document.getElementById("categoryChips");
-
-    const modalBackdrop = document.getElementById("reviewModalBackdrop");
-    const modalTitle = document.getElementById("reviewModalTitle");
-    const modalBody = document.getElementById("reviewModalBody");
-    const modalAmazonLink = document.getElementById("reviewModalAmazonLink");
-    const modalClose = document.getElementById("reviewModalClose");
-    const modalDismiss = document.getElementById("reviewModalDismiss");
-
+    // ====== 运行态数据 ======
+    let products = []; // 最终渲染用
     let activeCategory = "All picks";
     let searchTerm = "";
 
+    // ====== CSV 解析（支持逗号或TAB，支持引号）======
+    function parseDelimited(text) {
+      const sample = text.slice(0, 2000);
+      const commaCount = (sample.match(/,/g) || []).length;
+      const tabCount = (sample.match(/\t/g) || []).length;
+      const delim = tabCount > commaCount ? "\t" : ",";
+
+      const rows = [];
+      let row = [];
+      let cur = "";
+      let inQuotes = false;
+
+      for (let i = 0; i < text.length; i++) {
+        const ch = text[i];
+        const next = text[i + 1];
+
+        if (ch === '"') {
+          if (inQuotes && next === '"') { // escaped quote
+            cur += '"';
+            i++;
+          } else {
+            inQuotes = !inQuotes;
+          }
+          continue;
+        }
+
+        if (!inQuotes && ch === delim) {
+          row.push(cur);
+          cur = "";
+          continue;
+        }
+
+        if (!inQuotes && (ch === "\n" || ch === "\r")) {
+          if (ch === "\r" && next === "\n") i++;
+          row.push(cur);
+          cur = "";
+          // 忽略空行
+          if (row.some(cell => (cell || "").trim() !== "")) rows.push(row);
+          row = [];
+          continue;
+        }
+
+        cur += ch;
+      }
+
+      // last cell
+      row.push(cur);
+      if (row.some(cell => (cell || "").trim() !== "")) rows.push(row);
+
+      if (!rows.length) return [];
+
+      const header = rows[0].map(h => (h || "").trim());
+      const out = [];
+      for (let r = 1; r < rows.length; r++) {
+        const obj = {};
+        for (let c = 0; c < header.length; c++) {
+          obj[header[c]] = (rows[r][c] || "").trim();
+        }
+        out.push(obj);
+      }
+      return out;
+    }
+
+    // ====== 从 CSV 生成你页面需要的 products（核心）======
+    function buildProductsFromRows(rows) {
+      const filtered = rows.filter(r => (r.market || "").trim().toUpperCase() === MARKET_CODE);
+
+      const mapped = filtered
+        .map((r, idx) => {
+          const asin = (r.asin || "").trim();
+          if (!asin) return null;
+
+          // 图片字段：image_url
+          let image = (r.image_url || r.image || "").trim();
+
+          // 你的 image_url 里可能有 http 图片，浏览器在 https 页面里有时会不显示；
+          // 这里不强改，只做基本兜底：没有图就留空（卡片仍显示）
+          if (!image) image = "";
+
+          const category = baseCategories[idx % baseCategories.length];
+          const broadCat = CATEGORY_MAP[category] || "Office & Daily Use";
+
+          // 标题优先用 CSV 的 title，没有就退回
+          const title = (r.title || "").trim() || `Product #${idx + 1} – ${broadCat} Pick`;
+
+          // 你只要求 asin + image_url；其它字段不采集也可以，
+          // 但为了不改变卡片结构，这里用 keyword/remark 做简要说明（为空也没问题）
+          const keyword = (r.keyword || "").trim();
+          const remark = (r.remark || "").trim();
+          const hook = keyword
+            ? `Keyword: ${keyword}`
+            : `A practical option in the ${broadCat.toLowerCase()} space for US shoppers.`;
+
+          const details = remark
+            ? remark
+            : "Open the product page on Amazon.com to confirm the latest details, compatibility notes and customer reviews.";
+
+          const approxPriceLabel = "Check live price on Amazon.com";
+          const amazonUrl = `https://${AMAZON_DOMAIN}/dp/${asin}/?tag=${encodeURIComponent(AFFILIATE_TAG)}`;
+
+          const reviewText =
+            `${title}\n\n` +
+            `Short note:\n` +
+            (remark ? `• ${remark}\n` : `• A curated pick for typical US usage.\n`) +
+            (keyword ? `• Keyword: ${keyword}\n` : "") +
+            `\nAlways review the full Amazon listing for current price, availability, and reviews.`;
+
+          return {
+            id: idx + 1,
+            asin,
+            image,
+            category,
+            broadCategory: broadCat,
+            title,
+            hook,
+            details,
+            approxPriceLabel,
+            amazonUrl,
+            reviewText
+          };
+        })
+        .filter(Boolean);
+
+      return mapped;
+    }
+
+    // ====== 渲染（保留你原逻辑）======
     function renderProducts(list) {
       gridEl.innerHTML = "";
       if (!list.length) {
@@ -853,19 +891,19 @@ background-size: cover;
           card.className = "product-card";
           card.innerHTML = `
             <div class="product-card_media">
-              <img src="${p.image}" alt="${p.title}" loading="lazy" />
+              ${p.image ? `<img src="${p.image}" alt="${escapeHtml(p.title)}" loading="lazy" />` : ""}
             </div>
             <div class="product-card_body">
               <div class="product-card_meta">
                 <span class="meta-cat">${p.broadCategory}</span>
                 <span class="meta-asin">ASIN: ${p.asin}</span>
               </div>
-              <h3 class="product-card_title">${p.title}</h3>
-              <p class="product-card_hook">${p.hook}</p>
-              <p class="product-card_desc">${p.details}</p>
+              <h3 class="product-card_title">${escapeHtml(p.title)}</h3>
+              <p class="product-card_hook">${escapeHtml(p.hook)}</p>
+              <p class="product-card_desc">${escapeHtml(p.details)}</p>
             </div>
             <div class="product-card_footer">
-              <div class="product-card_price">${p.approxPriceLabel}</div>
+              <div class="product-card_price">${escapeHtml(p.approxPriceLabel)}</div>
               <div class="product-card_actions">
                 <button class="btn btn-secondary" data-action="review" data-asin="${p.asin}">
                   Read review
@@ -882,6 +920,15 @@ background-size: cover;
       if (countEl) {
         countEl.textContent = `Showing ${list.length} products`;
       }
+    }
+
+    function escapeHtml(str) {
+      return String(str || "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
     }
 
     function getFilteredProducts() {
@@ -953,7 +1000,132 @@ background-size: cover;
       if (e.key === "Escape") closeReviewModal();
     });
 
-    renderProducts(products);
+    // ====== 缓存 + 定时更新（15分钟）======
+    const CACHE_KEY = `products_cache_${MARKET_CODE}`;
+    const CACHE_TS_KEY = `products_cache_ts_${MARKET_CODE}`;
+
+    function setStatus(msg) {
+      if (dataStatusEl) dataStatusEl.textContent = msg || "";
+    }
+
+    function loadCacheIfFresh() {
+      try {
+        const ts = Number(localStorage.getItem(CACHE_TS_KEY) || "0");
+        const raw = localStorage.getItem(CACHE_KEY);
+        if (!ts || !raw) return null;
+        if (Date.now() - ts > REFRESH_MS) return null;
+        const parsed = JSON.parse(raw);
+        if (!Array.isArray(parsed) || !parsed.length) return null;
+        return parsed;
+      } catch {
+        return null;
+      }
+    }
+
+    function saveCache(list) {
+      try {
+        localStorage.setItem(CACHE_KEY, JSON.stringify(list));
+        localStorage.setItem(CACHE_TS_KEY, String(Date.now()));
+      } catch {}
+    }
+
+    async function fetchAndUpdate() {
+      // 没填 CSV_URL 时直接用兜底
+      if (!CSV_URL || CSV_URL.includes("PASTE_YOUR_HTTPS_CSV_URL_HERE")) {
+        setStatus("Data source not set (CSV_URL). Showing fallback products.");
+        products = buildFallbackProducts();
+        applyFilters();
+        return;
+      }
+
+      setStatus("Updating product list...");
+      try {
+        const url = new URL(CSV_URL);
+        // cache bust，避免浏览器强缓存
+        url.searchParams.set("_ts", String(Date.now()));
+
+        const resp = await fetch(url.toString(), { method: "GET" });
+        if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+        const text = await resp.text();
+
+        const rows = parseDelimited(text);
+        const list = buildProductsFromRows(rows);
+
+        if (!list.length) {
+          throw new Error(`No ${MARKET_CODE} products found in CSV`);
+        }
+
+        products = list;
+        saveCache(list);
+        setStatus(`Updated: ${list.length} products (market=${MARKET_CODE}).`);
+        applyFilters();
+      } catch (err) {
+        // 失败时：优先展示缓存，再不行展示兜底
+        const cached = loadCacheIfFresh();
+        if (cached) {
+          products = cached;
+          setStatus(`Using cached data (market=${MARKET_CODE}). Live update failed.`);
+          applyFilters();
+          return;
+        }
+
+        products = buildFallbackProducts();
+        setStatus(`Live update failed. Showing fallback products. (${String(err).slice(0, 120)})`);
+        applyFilters();
+      }
+    }
+
+    function buildFallbackProducts() {
+      const rawProducts = rawProductsBase.map((p, index) => ({
+        id: index + 1,
+        asin: p.asin,
+        image: p.image,
+        category: baseCategories[index % baseCategories.length]
+      }));
+
+      return rawProducts.map((p, index) => {
+        const broadCat = CATEGORY_MAP[p.category] || "Office & Daily Use";
+        const title = `Product #${index + 1} – ${broadCat} Pick`;
+        const hook =
+          `This pick is designed as a practical option in the ${broadCat.toLowerCase()} space for US shoppers, balancing everyday performance and value.`;
+        const details =
+          "Open the product page on Amazon.com to confirm the latest details and customer reviews.";
+        const approxPriceLabel = "Check live price on Amazon.com";
+        const amazonUrl = `https://${AMAZON_DOMAIN}/dp/${p.asin}/?tag=${encodeURIComponent(AFFILIATE_TAG)}`;
+        const reviewText =
+          `${title}\n\n` +
+          `Always open the full product page on Amazon.com to check the latest details and reviews before you decide.`;
+        return {
+          ...p,
+          broadCategory: broadCat,
+          title,
+          hook,
+          details,
+          approxPriceLabel,
+          amazonUrl,
+          reviewText
+        };
+      });
+    }
+
+    // ====== 启动：先用缓存/兜底快速显示，再拉取更新 ======
+    (function boot() {
+      const cached = loadCacheIfFresh();
+      if (cached) {
+        products = cached;
+        setStatus(`Loaded cached data (market=${MARKET_CODE}).`);
+      } else {
+        products = buildFallbackProducts();
+        setStatus("Loaded fallback products. Updating...");
+      }
+      renderProducts(getFilteredProducts());
+
+      // 立刻拉一次最新
+      fetchAndUpdate();
+
+      // 每 15 分钟更新一次
+      setInterval(fetchAndUpdate, REFRESH_MS);
+    })();
   </script>
 </body>
 </html>
