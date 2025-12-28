@@ -481,6 +481,16 @@ background-size: cover;
         <button class="nav-btn">Buying Guide</button>
         <button class="nav-btn">About</button>
         <button class="nav-btn">Privacy</button>
+        <select id="marketSelect" class="market-select" aria-label="Select market">
+          <option value="US">US</option>
+          <option value="UK">UK</option>
+          <option value="DE">DE</option>
+          <option value="FR">FR</option>
+          <option value="IT">IT</option>
+          <option value="ES">ES</option>
+          <option value="CA">CA</option>
+          <option value="JP">JP</option>
+        </select>
         <button class="nav-btn primary">
           <span>Affiliate Disclosure</span>
           <span class="badge">US</span>
@@ -2718,11 +2728,18 @@ background-size: cover;
     const baseCategories = ["Electronics", "Home", "Outdoor", "Car", "Office"];
 
     // === 自动同步 CSV（GitHub Raw）===
-    const MARKET_CODE = "US";
-    const REFRESH_MS = 15 * 60 * 1000;
-    const RAW_CSV_URL = "https://raw.githubusercontent.com/dalemy-1/us/main/us.csv";
-
-    const rawProductsBase = [
+    const MARKET_CODE = (() => {
+  const p = new URLSearchParams(location.search);
+  const m = (p.get("m") || "").trim().toUpperCase();
+  return ["US","UK","DE","FR","IT","ES","CA","JP"].includes(m) ? m : "US";
+})();
+const REFRESH_MS = 15 * 60 * 1000;
+    const RAW_BASE = "https://raw.githubusercontent.com/dalemy-1/us/main/";
+function csvUrlForMarket(m){
+  return RAW_BASE + m.toLowerCase() + ".csv";
+}
+const RAW_CSV_URL = csvUrlForMarket(MARKET_CODE);
+const rawProductsBase = [
       { asin: "B0DZC33VRN", image: "https://m.media-amazon.com/images/I/61bEKd+r9eL._AC_SX679_.jpg" },
       { asin: "B0DH1KVXHR", image: "https://m.media-amazon.com/images/I/61tbpgPIKzL._AC_SL1480_.jpg" },
       { asin: "B0FCCLB76S", image: "https://m.media-amazon.com/images/I/819O4J8xUbL._AC_SL1500_.jpg" },
@@ -2919,7 +2936,15 @@ background-size: cover;
               </div>
             </div>
           `;
-          gridEl.appendChild(card);
+          // 图片错误兜底（避免出现破图块）
+    const imgEl = card.querySelector("img");
+    if (imgEl) {
+      imgEl.addEventListener("error", () => {
+        const fallback = getAsinWidgetImg(p.asin, MARKET_CODE);
+        if (fallback && imgEl.src !== fallback) imgEl.src = fallback;
+      }, { once: true });
+    }
+    gridEl.appendChild(card);
         });
       }
       if (countEl) {
