@@ -1,0 +1,1415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>FR Deep Review • Smart Picks FR</title>
+  <meta name="description"
+        content="Editorial-style Amazon.fr product reviews & buying advice. Real ASINs with compliant affiliate links for French shoppers." />
+
+  <style>
+    :root {
+      --bg: #f3f5fb;
+      --card-bg: #ffffff;
+      --accent: #ff7a59;
+      --accent-soft: rgba(255, 122, 89, 0.12);
+      --accent-dark: #cf5535;
+      --text-main: #141626;
+      --text-muted: #4b5563;
+      --border-subtle: #e0e4f2;
+      --chip-bg: #e5eef5;
+      --chip-active-bg: #111827;
+      --chip-active-text: #f9fafb;
+      --shadow-soft: 0 18px 45px rgba(15, 23, 42, 0.12);
+      --radius-lg: 18px;
+      --radius-xl: 26px;
+      --radius-pill: 999px;
+      --transition-fast: 0.18s ease-out;
+      --font-sans: system-ui, -apple-system, BlinkMacSystemFont,
+        "Segoe UI", Roboto, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: var(--font-sans);
+      background: radial-gradient(circle at 0 0, #e8f0ff, #f3f5fb 52%, #eef1ff 80%);
+      color: var(--text-main);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    body {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 16px 16px 64px;
+    }
+
+    /* 顶部品牌栏 */
+
+    .site-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 10px 16px;
+      margin-bottom: 18px;
+    }
+
+    .brand-block {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .brand-title {
+      font-weight: 750;
+      letter-spacing: 0.02em;
+      font-size: 0.98rem;
+    }
+
+    .brand-sub {
+      font-size: 0.78rem;
+      color: #6b7280;
+    }
+
+    .main-nav {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      font-size: 0.78rem;
+    }
+
+    .nav-pill {
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      padding: 6px 12px;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(10px);
+    }
+
+    .nav-pill.home {
+      background: #020617;
+      color: #f9fafb;
+      border-color: #020617;
+      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.35);
+    }
+
+    .nav-pill span {
+      opacity: 0.8;
+    }
+
+    /* 主体 hero 区域 */
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 3fr) minmax(0, 2.6fr);
+      gap: 18px;
+      margin-bottom: 20px;
+    }
+
+    .hero-card {
+      background: radial-gradient(circle at top left, #ffffff, #eef2ff);
+      border-radius: var(--radius-xl);
+      padding: 20px 22px 18px;
+      box-shadow: 0 16px 40px rgba(148, 163, 184, 0.35);
+      border: 1px solid rgba(209, 213, 219, 0.8);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-card::before {
+      content: "";
+      position: absolute;
+      inset: -40%;
+      background: radial-gradient(circle at 0 0, rgba(59, 130, 246, 0.12), transparent 55%),
+        radial-gradient(circle at 100% 0, rgba(244, 114, 182, 0.1), transparent 55%);
+      opacity: 0.2;
+      pointer-events: none;
+    }
+
+    .hero-inner {
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-title {
+      font-size: 1.15rem;
+      font-weight: 750;
+      letter-spacing: 0.01em;
+      margin-bottom: 6px;
+    }
+
+    .hero-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin: 8px 0 14px;
+      font-size: 0.78rem;
+      color: #4b5563;
+    }
+
+    .hero-badge {
+      border-radius: 999px;
+      padding: 4px 10px;
+      background: rgba(15, 23, 42, 0.03);
+      border: 1px solid rgba(148, 163, 184, 0.45);
+    }
+
+    .hero-body {
+      font-size: 0.87rem;
+      color: var(--text-muted);
+    }
+
+    .hero-body p {
+      margin: 6px 0;
+    }
+
+    .hero-flag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 10px;
+      font-size: 0.8rem;
+      color: #374151;
+    }
+
+    .hero-flag span {
+      display: inline-flex;
+      padding: 4px 9px;
+      border-radius: 999px;
+      background: #020617;
+      color: #f9fafb;
+      font-size: 0.72rem;
+      box-shadow: 0 0 0 1px rgba(15, 23, 42, 0.8);
+    }
+
+    /* 使用说明卡片 */
+
+    .hero-card--dark {
+      background: radial-gradient(circle at top, #020617, #020617);
+      color: #f9fafb;
+      box-shadow: 0 18px 45px rgba(15, 23, 42, 0.8);
+      border: none;
+    }
+
+    .hero-card--dark .hero-title {
+      font-size: 0.96rem;
+      color: #e5e7eb;
+      margin-bottom: 6px;
+    }
+
+    .hero-card--dark p,
+    .hero-card--dark li {
+      font-size: 0.8rem;
+      color: #d1d5db;
+    }
+
+    .hero-card--dark li + li {
+      margin-top: 4px;
+    }
+
+    .hero-card--dark ul {
+      padding-left: 1.2rem;
+      margin: 8px 0 12px;
+    }
+
+    .hero-card--dark small {
+      font-size: 0.68rem;
+      color: #9ca3af;
+    }
+
+    /* 筛选区 */
+
+    .filter-bar {
+      margin-top: 6px;
+      margin-bottom: 10px;
+      padding: 8px 18px 8px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid rgba(209, 213, 219, 0.9);
+      box-shadow: 0 10px 28px rgba(148, 163, 184, 0.38);
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .chip-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-right: 10px;
+    }
+
+    .chip {
+      border-radius: 999px;
+      padding: 4px 11px;
+      font-size: 0.78rem;
+      border: 1px solid rgba(209, 213, 219, 0.85);
+      background: var(--chip-bg);
+      color: #111827;
+      cursor: pointer;
+      transition: background var(--transition-fast), color var(--transition-fast), border-color var(--transition-fast);
+    }
+
+    .chip span {
+      opacity: 0.85;
+    }
+
+    .chip:hover {
+      background: #fbbf77;
+      color: #111827;
+      border-color: #f97316;
+    }
+
+    .chip.is-active {
+      background: var(--chip-active-bg);
+      color: var(--chip-active-text);
+      border-color: transparent;
+      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.45);
+    }
+
+    .search-box {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex: 1;
+      justify-content: flex-end;
+      min-width: 260px;
+    }
+
+    .search-input {
+      flex: 1;
+      min-width: 170px;
+      border-radius: 999px;
+      border: 1px solid #d1d5db;
+      padding: 7px 12px;
+      font-size: 0.78rem;
+      outline: none;
+      background: #f9fafb;
+    }
+
+    .btn-search {
+      border: none;
+      background: #020617;
+      color: #f9fafb;
+      padding: 7px 16px;
+      font-size: 0.78rem;
+      border-radius: 999px;
+      cursor: pointer;
+      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.38);
+      transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+    }
+
+    .btn-search:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 14px 30px rgba(15, 23, 42, 0.55);
+    }
+
+    .filter-meta {
+      font-size: 0.75rem;
+      color: #6b7280;
+      white-space: nowrap;
+    }
+
+    /* 支撑信息卡片 */
+
+    .support-grid {
+      margin: 18px 0 20px;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .support-card {
+      background: rgba(255, 255, 255, 0.96);
+      border-radius: 18px;
+      box-shadow: 0 10px 26px rgba(148, 163, 184, 0.55);
+      border: 1px solid rgba(209, 213, 219, 0.9);
+      padding: 15px 14px 14px;
+      font-size: 0.78rem;
+      color: #4b5563;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .support-card h3 {
+      font-size: 0.8rem;
+      margin-bottom: 4px;
+      color: var(--text-main);
+    }
+
+    .support-card ul {
+      padding-left: 1rem;
+      margin: 4px 0 0;
+    }
+
+    .support-card li + li {
+      margin-top: 2px;
+    }
+
+    /* 产品标题与网格 */
+
+    .section-heading {
+      font-size: 0.86rem;
+      font-weight: 650;
+      margin-bottom: 6px;
+      margin-top: 10px;
+    }
+
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    /* 卡片：统一高度 + 底部按钮对齐 */
+
+    .product-card {
+      display: flex;
+      flex-direction: column;
+      background: rgba(255, 255, 255, 0.98);
+      border-radius: 18px;
+      padding: 10px 10px 12px;
+      box-shadow: 0 14px 38px rgba(148, 163, 184, 0.7);
+      border: 1px solid rgba(209, 213, 219, 0.85);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .product-card_media {
+      border-radius: 14px;
+      background: #0b1020;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      margin-bottom: 10px;
+      min-height: 160px;
+    }
+
+    .product-card_media img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+      background: radial-gradient(circle at 50% 0, #1f2937, #020617);
+    }
+
+    .product-card_body {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+
+    .product-card_meta {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #6b7280;
+      margin-bottom: 4px;
+      display: flex;
+      justify-content: space-between;
+      gap: 4px;
+    }
+
+    .meta-asin {
+      text-transform: none;
+      letter-spacing: 0;
+    }
+
+    .product-card_title {
+      font-size: 0.86rem;
+      margin: 0 0 6px;
+      color: #111827;
+    }
+
+    .product-card_hook {
+      font-size: 0.78rem;
+      color: #4b5563;
+      margin: 0 0 4px;
+    }
+
+    .product-card_desc {
+      font-size: 0.78rem;
+      color: #6b7280;
+      margin: 0;
+      flex: 1;
+    }
+
+    .product-card_footer {
+      margin-top: auto;
+      padding-top: 10px;
+      border-top: 1px solid rgba(209, 213, 219, 0.6);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .product-card_price {
+      font-size: 0.76rem;
+      color: #4b5563;
+    }
+
+    .product-card_actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .btn-primary,
+    .btn-secondary {
+      border-radius: 999px;
+      font-size: 0.76rem;
+      padding: 7px 10px;
+      border: none;
+      cursor: pointer;
+      white-space: nowrap;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex: 1;
+    }
+
+    .btn-secondary {
+      background: #e5e7eb;
+      color: #111827;
+      border: 1px solid #d1d5db;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #111827;
+      border: 1px solid #f97316;
+      box-shadow: 0 10px 26px rgba(249, 115, 22, 0.45);
+    }
+
+    .btn-secondary:hover {
+      background: #e0ecff;
+    }
+
+    .btn-primary:hover {
+      background: #f97316;
+      transform: translateY(-1px);
+      box-shadow: 0 14px 30px rgba(249, 115, 22, 0.6);
+    }
+
+    /* 弹窗（Read review） */
+
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.75);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 40;
+    }
+
+    .modal-backdrop.is-open {
+      display: flex;
+    }
+
+    .modal-body {
+      width: min(640px, 96vw);
+      background: #020617;
+      color: #f9fafb;
+      border-radius: 22px;
+      padding: 22px 22px 18px;
+      box-shadow: 0 40px 120px rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(148, 163, 184, 0.6);
+    }
+
+    .modal-title-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .modal-title {
+      font-size: 0.98rem;
+      font-weight: 650;
+      letter-spacing: 0.01em;
+    }
+
+    .modal-close {
+      border-radius: 999px;
+      border: 1px solid #4b5563;
+      background: transparent;
+      color: #e5e7eb;
+      width: 26px;
+      height: 26px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    .modal-content {
+      font-size: 0.83rem;
+      color: #e5e7eb;
+      margin-bottom: 14px;
+    }
+
+    .modal-content p {
+      margin: 6px 0;
+    }
+
+    .modal-meta {
+      font-size: 0.72rem;
+      color: #9ca3af;
+      margin-top: 6px;
+    }
+
+    .modal-footer {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 8px;
+    }
+
+    .modal-footer .btn-primary {
+      background: #f97316;
+      color: #111827;
+      border-color: #fb923c;
+    }
+
+    .modal-footer .btn-primary:hover {
+      background: #fb923c;
+    }
+
+    /* 响应式 */
+
+    @media (max-width: 960px) {
+      .hero-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    @media (max-width: 720px) {
+      body {
+        padding: 12px 12px 48px;
+      }
+
+      .product-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .support-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .filter-bar {
+        align-items: stretch;
+      }
+
+      .search-box {
+        justify-content: flex-start;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .product-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      .support-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      .filter-bar {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .search-box {
+        width: 100%;
+      }
+    }
+    /* 让 FR 卡片和 DE 站点一样紧凑的布局 */
+.product-grid {
+  /* 和 DE 一样，多一点列数、卡片更窄一点 */
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+}
+
+/* 卡片整体稍微缩小一些 */
+.product-card {
+  font-size: 0.8rem;
+  padding: 16px 14px 16px;
+}
+
+/* 图片区域高度限制，避免卡片被撑得太高 */
+.product-card__media {
+  padding-bottom: 10px;
+}
+
+.product-card__media img {
+  display: block;
+  width: 100%;
+  max-height: 210px;      /* 关键：控制图片高度，和 DE 视觉接近 */
+  object-fit: cover;
+}
+
+/* 底部按钮区再收紧一点间距，让整体高度一致 */
+.product-card__footer {
+  padding-top: 10px;
+}
+
+.product-card__actions {
+  gap: 6px;
+}
+
+  /* market selector */
+.market-select{
+  margin-left:10px;
+  padding:6px 10px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,0.25);
+  background: rgba(2,6,23,0.65);
+  color:#fff;
+  font-size:0.9rem;
+  outline:none;
+}
+.market-select option{ color:#111827; }
+
+</style>
+</head>
+
+<body>
+  <header class="site-header">
+    <div class="brand-block">
+      <div class="brand-title">FR Deep Review • Smart Picks FR</div>
+      <div class="brand-sub">
+        Editorial-style Amazon.fr product reviews &amp; buying advice · Not affiliated with Amazon.
+      </div>
+    </div>
+    <nav class="main-nav">
+      <select id="marketSelect" class="market-select" aria-label="Select market">
+<option value="US">US</option>
+<option value="UK">UK</option>
+<option value="DE">DE</option>
+<option value="FR" selected>FR</option>
+<option value="IT">IT</option>
+<option value="ES">ES</option>
+<option value="CA">CA</option>
+<option value="JP">JP</option>
+</select>
+
+      <a href="https://dalemy-1.github.io/" class="nav-pill home"><span>Home</span></a>
+      <div class="nav-pill"><span>Buying Guide</span></div>
+      <div class="nav-pill"><span>About</span></div>
+      <div class="nav-pill"><span>Privacy</span></div>
+      <div class="nav-pill"><span>Affiliate Disclosure</span></div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero-grid" aria-label="Intro">
+      <article class="hero-card">
+        <div class="hero-inner">
+          <h1 class="hero-title">Amazon.fr product cards with real ASIN links.</h1>
+          <p class="hero-body">
+            As an Amazon Associate I earn from qualifying purchases. Some links on this page are affiliate links.
+            This page uses real Amazon.fr ASINs and editorial-style summaries, displayed in a grid layout
+            that is designed to be friendly for Amazon Associates.
+          </p>
+          <div class="hero-badges">
+            <span class="hero-badge">5 broad usage categories</span>
+            <span class="hero-badge">Real product images &amp; ASINs</span>
+            <span class="hero-badge">Direct /dp/ links with tag applied</span>
+          </div>
+          <ul class="hero-body">
+            <li>Browse a concise shortlist instead of endless result pages.</li>
+            <li>Each card leads directly to the matching product page on Amazon.fr.</li>
+            <li>Use the filters and search box to find everyday picks quickly.</li>
+          </ul>
+          <div class="hero-flag">
+            <span>FR</span> Associates ID: fr0e28-21
+          </div>
+        </div>
+      </article>
+
+      <article class="hero-card hero-card--dark">
+        <div class="hero-inner">
+          <h2 class="hero-title">How to use this shortlist</h2>
+          <p>
+            Each product card gives you a short editorial-style note plus a direct link to the live Amazon.fr product
+            page. Treat this page as a curated shortlist, not a replacement for reading the full details and reviews on
+            Amazon.fr.
+          </p>
+          <ul>
+            <li>Use the category chips or focus buttons to narrow down your view by everyday usage.</li>
+            <li>Use the search bar for ASIN, simple keywords or rough product names.</li>
+            <li>Click <strong>“Read review”</strong> for an on-page editorial-style note.</li>
+            <li>
+              Click <strong>“Go to Amazon”</strong> to see full details, live pricing and customer reviews on
+              Amazon.fr.
+            </li>
+          </ul>
+          <small>
+            Final pricing, availability and review scores are always determined by Amazon.fr on their own pages.
+          </small>
+        </div>
+      </article>
+    </section>
+
+    <!-- 筛选区 -->
+    <section class="filter-bar" aria-label="Filters and search">
+      <div class="chip-group" role="radiogroup" aria-label="Usage categories">
+        <button class="chip is-active" data-filter="all" aria-pressed="true"><span>All picks</span></button>
+        <button class="chip" data-filter="Electronics &amp; Gadgets"><span>Electronics &amp; Gadgets</span></button>
+        <button class="chip" data-filter="Home &amp; Kitchen"><span>Home &amp; Kitchen</span></button>
+        <button class="chip" data-filter="Outdoor &amp; Sports"><span>Outdoor &amp; Sports</span></button>
+        <button class="chip" data-filter="Car Accessories"><span>Car Accessories</span></button>
+        <button class="chip" data-filter="Office &amp; Daily Use"><span>Office &amp; Daily Use</span></button>
+      </div>
+
+      <div class="search-box">
+        <input class="search-input" type="search" placeholder="Search by title, category or ASIN on this page..."
+               aria-label="Search products" />
+        <button class="btn-search" type="button">Search</button>
+        <div class="filter-meta">
+          <span id="count-label">Showing 0 products</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 支撑信息区 -->
+    
+
+    <!-- 产品网格 -->
+    <section aria-label="Featured products">
+      <h2 class="section-heading">Featured product short-list for French shoppers</h2>
+      <div class="product-grid" id="product-grid"></div>
+    </section>
+    <section class="support-grid" aria-label="Buying notes for French shoppers">
+      <article class="support-card">
+        <h3>Buying guide: three quick checks before you order</h3>
+        <ul>
+          <li><strong>Usage context:</strong> will you use it daily, weekly or only on trips?</li>
+          <li><strong>Budget tier:</strong> are you aiming for entry-level, mid-range or premium?</li>
+          <li>
+            <strong>Top 2–3 priorities:</strong> for example battery life, noise level, size, ease of cleaning or
+            durability.
+          </li>
+        </ul>
+      </article>
+      <article class="support-card">
+        <h3>About this FR shortlist</h3>
+        <p>
+          All products on this page are selected from Amazon.fr using publicly available information such as product
+          descriptions, feature lists and typical usage scenarios. The focus is on clear, balanced everyday picks rather
+          than chasing the newest or most expensive models.
+        </p>
+        <p>
+          We do not claim that any single item here is objectively the “best” choice for everyone. Instead, each entry
+          is a snapshot of a product that could be a reasonable option for everyday use when matched to the right person
+          and budget.
+        </p>
+      </article>
+      <article class="support-card">
+        <h3>Privacy &amp; data</h3>
+        <p>
+          This site does not collect payment details or process orders. All transactions take place on Amazon.fr or
+          other third-party sites after you click through an external link.
+        </p>
+        <p>
+          Basic traffic analytics may be used to understand anonymous page usage such as page views and clicks. For the
+          latest information on how your data is handled please refer to the privacy policy and terms of use posted on
+          Amazon.fr.
+        </p>
+      </article>
+      <article class="support-card">
+        <h3>Affiliate disclosure</h3>
+        <p>
+          Deep Review • Smart Picks FR participates in the Amazon Associates programme. This means that we may earn a
+          small commission on qualifying purchases made through links marked as Amazon affiliate links, at no additional
+          cost to you.
+        </p>
+        <p>
+          Product selection and editorial notes are created independently and are not endorsed or pre-approved by
+          Amazon. Prices, availability and promotional offers can change at any time; only the information shown on
+          Amazon.fr at the moment of your visit is considered current.
+        </p>
+      </article>
+    </section>
+  </main>
+
+  <!-- 弹窗 -->
+  <div class="modal-backdrop" id="modal">
+    <div class="modal-body" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <div class="modal-title-row">
+        <h2 class="modal-title" id="modal-title">Product review</h2>
+        <button class="modal-close" type="button" aria-label="Close review">&times;</button>
+      </div>
+      <div class="modal-content" id="modal-content"></div>
+      <div class="modal-meta" id="modal-meta"></div>
+      <div class="modal-footer">
+        <button class="btn-secondary modal-close" type="button">Close</button>
+        <a class="btn-primary" id="modal-link" target="_blank" rel="nofollow noopener sponsored">Go to Amazon</a>
+      </div>
+    </div>
+  </div>
+
+  
+<script>
+/* ===================== Multi-market CSV sync (no UI changes) ===================== */
+(function () {
+  "use strict";
+
+  const MARKET_CODE = "FR";
+  const AMAZON_DOMAIN = "www.amazon.fr";
+  const AFFILIATE_TAG = "fr0e28-21";
+  const CSV_URL = "./fr.csv"; // same-folder CSV (GitHub Actions sync)
+  const REFRESH_MS = 15 * 60 * 1000;
+
+  // Country switcher (navigate to other country pages)
+  const marketSelect = document.getElementById("marketSelect");
+  if (marketSelect) {
+    marketSelect.value = MARKET_CODE;
+    marketSelect.addEventListener("change", () => {
+      const code = (marketSelect.value || "").toLowerCase();
+      if (!code) return;
+      // current pages are /us/, /uk/ ... use relative jump
+      window.location.href = `../${code}/`;
+    });
+  }
+
+  // ---- DOM (support multiple templates) ----
+  const gridEl =
+    document.getElementById("productGrid") ||
+    document.getElementById("product-grid") ||
+    document.querySelector(".product-grid");
+
+  const countEl =
+    document.getElementById("productCount") ||
+    document.getElementById("product-count") ||
+    document.querySelector("[data-role='product-count']");
+
+  const emptyEl =
+    document.getElementById("emptyState") ||
+    document.getElementById("empty-state");
+
+  const chipsContainer =
+    document.getElementById("categoryChips") ||
+    document.getElementById("category-chips");
+
+  const searchInput =
+    document.getElementById("searchInput") ||
+    document.getElementById("search-input");
+
+  const searchBtn =
+    document.getElementById("searchBtn") ||
+    document.getElementById("search-btn") ||
+    document.getElementById("searchButton") ||
+    document.getElementById("search-button");
+
+  // Modal variants
+  const modalBackdrop =
+    document.getElementById("reviewModalBackdrop") ||
+    document.getElementById("modalBackdrop") ||
+    document.getElementById("review-modal") ||
+    document.getElementById("reviewModal");
+
+  const modalTitle =
+    document.getElementById("reviewModalTitle") ||
+    document.getElementById("modalTitle") ||
+    document.getElementById("modal-title");
+
+  const modalBody =
+    document.getElementById("reviewModalBody") ||
+    document.getElementById("modalBody") ||
+    document.getElementById("modal-body");
+
+  const modalAmazonLink =
+    document.getElementById("reviewModalAmazonLink") ||
+    document.getElementById("modalAmazonLink") ||
+    document.getElementById("modal-cta") ||
+    document.getElementById("modal-amazon-btn") ||
+    document.getElementById("modal-link");
+
+  const modalClose =
+    document.getElementById("reviewModalClose") ||
+    document.getElementById("modalClose") ||
+    document.getElementById("modal-close");
+
+  const modalDismiss =
+    document.getElementById("reviewModalDismiss") ||
+    document.getElementById("modalDismiss") ||
+    document.getElementById("modalCancel") ||
+    document.getElementById("modal-cancel");
+
+  // ---- CSS class naming (detect template) ----
+  const usesUnderscore = !!document.querySelector(".product-card_media");
+  const usesBEM = !!document.querySelector(".product-card__media");
+  const cls = {
+    card: usesBEM ? "product-card" : "product-card",
+    media: usesBEM ? "product-card__media" : "product-card_media",
+    body: usesBEM ? "product-card__body" : "product-card_body",
+    meta: usesBEM ? "product-card__meta" : "product-card_meta",
+    title: usesBEM ? "product-card__title" : "product-card_title",
+    hook: usesBEM ? "product-card__hook" : "product-card_hook",
+    desc: usesBEM ? "product-card__desc" : "product-card_desc",
+    footer: usesBEM ? "product-card__footer" : "product-card_footer",
+    price: usesBEM ? "product-card__price" : "product-card_price",
+    actions: usesBEM ? "product-card__actions" : "product-card_actions",
+    metaCat: usesBEM ? "meta-cat" : "meta-cat",
+    metaAsin: usesBEM ? "meta-asin" : "meta-asin",
+    btn: "btn",
+    btnPrimary: "btn-primary",
+    btnSecondary: "btn-secondary",
+  };
+
+  // ---- Categories (keep original behavior: rotate) ----
+  const baseCategories = ["Electronics", "Home", "Outdoor", "Car", "Office"];
+  const CATEGORY_MAP = {
+    Electronics: "Electronics & Gadgets",
+    Audio: "Electronics & Gadgets",
+    Home: "Home & Kitchen",
+    Kitchen: "Home & Kitchen",
+    Outdoor: "Outdoor & Sports",
+    Sports: "Outdoor & Sports",
+    Car: "Car Accessories",
+    Office: "Office & Daily Use",
+    Other: "Office & Daily Use",
+  };
+
+  function escapeHtml(s) {
+    return String(s ?? "")
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#39;");
+  }
+
+  // Robust CSV parser (supports quotes + commas)
+  function parseCSV(text) {
+    const rows = [];
+    let row = [];
+    let cur = "";
+    let inQuotes = false;
+
+    for (let i = 0; i < text.length; i++) {
+      const ch = text[i];
+      const next = text[i + 1];
+
+      if (ch === '"') {
+        if (inQuotes && next === '"') {
+          cur += '"';
+          i++;
+        } else {
+          inQuotes = !inQuotes;
+        }
+        continue;
+      }
+
+      if (!inQuotes && (ch === "," || ch === "\n" || ch === "\r")) {
+        if (ch === "\r" && next === "\n") i++;
+        row.push(cur);
+        cur = "";
+        if (ch === "," ) continue;
+        rows.push(row);
+        row = [];
+        continue;
+      }
+
+      cur += ch;
+    }
+    row.push(cur);
+    rows.push(row);
+
+    // trim trailing empty lines
+    while (rows.length && rows[rows.length - 1].every((c) => String(c || "").trim() === "")) rows.pop();
+    return rows;
+  }
+
+  function normKey(k) {
+    return String(k || "")
+      .trim()
+      .toLowerCase()
+      .replace(/\s+/g, "_");
+  }
+
+  function safeUrl(u) {
+    const s = String(u || "").trim();
+    if (!s) return "";
+    // force https for amazon media (avoid mixed content)
+    if (s.startsWith("http://")) return "https://" + s.slice(7);
+    return s;
+  }
+
+  function buildAmazonUrl(asin, directLink) {
+    const a = String(asin || "").trim();
+    if (!a) return "#";
+    const link = String(directLink || "").trim();
+    if (link) return link;
+    return `https://${AMAZON_DOMAIN}/dp/${encodeURIComponent(a)}/?tag=${encodeURIComponent(AFFILIATE_TAG)}`;
+  }
+
+  function isRowActive(v) {
+    const s = String(v ?? "").trim().toLowerCase();
+    if (!s) return true;
+    if (["0", "false", "inactive", "off", "disabled", "remove"].includes(s)) return false;
+    return true;
+  }
+
+  async function fetchCsvRows() {
+    const res = await fetch(CSV_URL, { cache: "no-store" });
+    if (!res.ok) throw new Error(`CSV fetch failed: ${res.status}`);
+    const text = await res.text();
+    if (!text.trim()) throw new Error("CSV is empty");
+    const table = parseCSV(text);
+    const header = table.shift() || [];
+    const keys = header.map(normKey);
+
+    const out = [];
+    for (const r of table) {
+      const obj = {};
+      for (let i = 0; i < keys.length; i++) obj[keys[i]] = (r[i] ?? "").trim();
+      out.push(obj);
+    }
+    return out;
+  }
+
+  function guessCategory(row, fallbackIndex) {
+    const s = `${row.keyword || ""} ${row.remark || ""} ${row.title || ""}`.toLowerCase();
+    if (/(car|vehicle|auto|dash|charger|mount)/.test(s)) return "Car";
+    if (/(outdoor|sport|camp|hike|travel|bike)/.test(s)) return "Outdoor";
+    if (/(kitchen|home|cook|clean|vacuum|bed|sofa)/.test(s)) return "Home";
+    if (/(office|desk|work|printer|paper)/.test(s)) return "Office";
+    if (/(electronic|camera|audio|headphone|speaker|phone|tablet)/.test(s)) return "Electronics";
+    return baseCategories[fallbackIndex % baseCategories.length];
+  }
+
+  // Render chips (if container exists and template expects it)
+  function ensureChips(categories) {
+    if (!chipsContainer) return;
+    const buttons = Array.from(chipsContainer.querySelectorAll("button"));
+    if (buttons.length) return; // keep original buttons
+    const allBtn = document.createElement("button");
+    allBtn.className = "chip chip--active";
+    allBtn.type = "button";
+    allBtn.dataset.category = "All";
+    allBtn.textContent = "All";
+    chipsContainer.appendChild(allBtn);
+
+    categories.forEach((c) => {
+      const b = document.createElement("button");
+      b.className = "chip";
+      b.type = "button";
+      b.dataset.category = c;
+      b.textContent = c;
+      chipsContainer.appendChild(b);
+    });
+  }
+
+  let allProducts = [];
+  let activeCategory = "All";
+  let lastQuery = "";
+
+  function applyFilters() {
+    const q = String(lastQuery || "").trim().toLowerCase();
+    let list = allProducts.slice();
+
+    if (activeCategory !== "All") {
+      list = list.filter((p) => p.broadCategory === activeCategory);
+    }
+
+    if (q) {
+      list = list.filter((p) => {
+        return (
+          p.asin.toLowerCase().includes(q) ||
+          p.title.toLowerCase().includes(q) ||
+          p.broadCategory.toLowerCase().includes(q)
+        );
+      });
+    }
+
+    renderProducts(list);
+  }
+
+  function setCount(n, total) {
+    if (!countEl) return;
+    const txt = countEl.textContent || "";
+    if (txt.includes("Showing") && txt.includes("of")) {
+      countEl.textContent = `Showing ${n} of ${total} products`;
+    } else if (txt.toLowerCase().includes("showing")) {
+      countEl.textContent = `Showing ${n} products`;
+    } else {
+      countEl.textContent = `Showing ${n} products`;
+    }
+  }
+
+  function showEmpty(show) {
+    if (!emptyEl) return;
+    emptyEl.style.display = show ? "" : "none";
+  }
+
+  function openModal(p) {
+    if (!modalBackdrop) return;
+    if (modalTitle) modalTitle.textContent = p.title || "Product review";
+    if (modalBody) modalBody.textContent = p.reviewText || "";
+    if (modalAmazonLink) modalAmazonLink.href = p.amazonUrl || "#";
+    modalBackdrop.style.display = "flex";
+    modalBackdrop.setAttribute("aria-hidden", "false");
+  }
+
+  function closeModal() {
+    if (!modalBackdrop) return;
+    modalBackdrop.style.display = "none";
+    modalBackdrop.setAttribute("aria-hidden", "true");
+  }
+
+  if (modalClose) modalClose.addEventListener("click", closeModal);
+  if (modalDismiss) modalDismiss.addEventListener("click", closeModal);
+  if (modalBackdrop) {
+    modalBackdrop.addEventListener("click", (e) => {
+      if (e.target === modalBackdrop) closeModal();
+    });
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") closeModal();
+    });
+  }
+
+  function renderProducts(list) {
+    if (!gridEl) return;
+    gridEl.innerHTML = "";
+    showEmpty(list.length === 0);
+    setCount(list.length, allProducts.length);
+
+    list.forEach((p) => {
+      const card = document.createElement("article");
+      card.className = cls.card;
+
+      const media = document.createElement("div");
+      media.className = cls.media;
+
+      const img = document.createElement("img");
+      img.loading = "lazy";
+      img.alt = p.title || p.asin || "Product image";
+      img.referrerPolicy = "no-referrer";
+      img.src = p.image || "";
+      img.onerror = () => {
+        img.onerror = null;
+        // fallback: hide broken image but keep gradient box
+        img.removeAttribute("src");
+        img.style.display = "none";
+      };
+      media.appendChild(img);
+
+      const body = document.createElement("div");
+      body.className = cls.body;
+
+      const meta = document.createElement("div");
+      meta.className = cls.meta;
+      meta.innerHTML = `<span class="${cls.metaCat}">${escapeHtml(p.broadCategory)}</span><span class="${cls.metaAsin}">ASIN: ${escapeHtml(p.asin)}</span>`;
+
+      const h3 = document.createElement("h3");
+      h3.className = cls.title;
+      h3.textContent = p.title;
+
+      const hook = document.createElement("p");
+      hook.className = cls.hook;
+      hook.textContent = p.hook;
+
+      const desc = document.createElement("p");
+      desc.className = cls.desc;
+      desc.textContent = p.details;
+
+      body.appendChild(meta);
+      body.appendChild(h3);
+      body.appendChild(hook);
+      body.appendChild(desc);
+
+      const footer = document.createElement("div");
+      footer.className = cls.footer;
+
+      const price = document.createElement("div");
+      price.className = cls.price;
+      price.textContent = p.approxPriceLabel;
+
+      const actions = document.createElement("div");
+      actions.className = cls.actions;
+
+      const btnReview = document.createElement("button");
+      btnReview.className = `${cls.btn} ${cls.btnSecondary}`.trim();
+      btnReview.type = "button";
+      btnReview.textContent = "Read review";
+      btnReview.addEventListener("click", () => openModal(p));
+
+      const a = document.createElement("a");
+      a.className = `${cls.btn} ${cls.btnPrimary}`.trim();
+      a.href = p.amazonUrl;
+      a.target = "_blank";
+      a.rel = "nofollow noopener sponsored";
+      a.textContent = "View details";
+
+      actions.appendChild(btnReview);
+      actions.appendChild(a);
+
+      footer.appendChild(price);
+      footer.appendChild(actions);
+
+      card.appendChild(media);
+      card.appendChild(body);
+      card.appendChild(footer);
+
+      gridEl.appendChild(card);
+    });
+  }
+
+  // ---- Events: chips + search ----
+  function bindChips() {
+    if (!chipsContainer) return;
+    chipsContainer.addEventListener("click", (e) => {
+      const btn = e.target.closest("button");
+      if (!btn) return;
+      const cat = btn.dataset.category || "All";
+      activeCategory = cat;
+
+      // active class variants
+      chipsContainer.querySelectorAll("button").forEach((b) => {
+        b.classList.remove("chip--active");
+        b.classList.remove("active");
+      });
+      btn.classList.add(btn.classList.contains("chip") ? "chip--active" : "active");
+
+      applyFilters();
+    });
+  }
+
+  function bindSearch() {
+    if (!searchInput) return;
+    const run = () => {
+      lastQuery = searchInput.value || "";
+      applyFilters();
+    };
+    if (searchBtn) searchBtn.addEventListener("click", run);
+    searchInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        run();
+      }
+    });
+    searchInput.addEventListener("input", () => {
+      // light debounce
+      window.clearTimeout(searchInput.__t);
+      searchInput.__t = window.setTimeout(run, 160);
+    });
+  }
+
+  function buildProductsFromRows(rows) {
+    const filtered = rows
+      .filter((r) => (r.market || r.country || "").trim().toUpperCase() === MARKET_CODE)
+      .filter((r) => isRowActive(r.status));
+
+    const built = filtered.map((r, index) => {
+      const asin = String(r.asin || r.asin_code || "").trim();
+      const image = safeUrl(r.image_url || r.image || r.img || "");
+      const directLink = (r.link || r.url || "").trim();
+      const category = guessCategory(r, index);
+      const broadCat = CATEGORY_MAP[category] || "Office & Daily Use";
+      const title = String(r.title || "").trim() || `Product #${index + 1} – ${broadCat} Pick`;
+
+      const hook = `This pick is designed as a practical option in the ${broadCat.toLowerCase()} space for ${MARKET_CODE} shoppers, balancing everyday performance and value.`;
+      const details =
+        "Use this shortlist as a quick way to spot products that may deserve a closer look on the retailer's product page. Each card focuses on simple fit, features and everyday use rather than chasing extreme specs.";
+      const approxPriceLabel = `Check live price on ${AMAZON_DOMAIN.replace("www.","")}`;
+      const amazonUrl = buildAmazonUrl(asin, directLink);
+
+      const reviewText =
+        `${title}\n\n` +
+        `This editorial note highlights key reasons why this item might be a good fit:\n` +
+        `• Everyday use: aimed at typical home or personal use rather than specialist scenarios.\n` +
+        `• Effort vs. benefit: chosen where setup, maintenance and day-to-day use feel reasonable.\n` +
+        `• Value: a sensible balance of features for the price.\n\n` +
+        `Always open the full product page to check the latest details and customer reviews before you decide.`;
+
+      return {
+        id: index + 1,
+        asin,
+        image,
+        category,
+        broadCategory: broadCat,
+        title,
+        hook,
+        details,
+        approxPriceLabel,
+        amazonUrl,
+        reviewText,
+      };
+    });
+
+    return built.filter((p) => p.asin);
+  }
+
+  async function syncOnce() {
+    try {
+      const rows = await fetchCsvRows();
+      const built = buildProductsFromRows(rows);
+      if (built.length) {
+        allProducts = built;
+        ensureChips([
+          "Electronics & Gadgets",
+          "Home & Kitchen",
+          "Outdoor & Sports",
+          "Car Accessories",
+          "Office & Daily Use",
+        ]);
+        applyFilters();
+      } else {
+        // keep existing page content if CSV has no rows for this market
+        setCount(0, 0);
+        showEmpty(true);
+      }
+    } catch (err) {
+      // keep current (hardcoded) products if present; do not break page
+      console.warn("[csv-sync]", err);
+    }
+  }
+
+  // bootstrap: if there is already a global "products" array (from original page), use it as fallback UI
+  function bootstrapFallbackFromExisting() {
+    if (Array.isArray(window.products) && window.products.length) {
+      // attempt to normalize existing structure
+      allProducts = window.products.map((p, idx) => ({
+        id: idx + 1,
+        asin: p.asin || "",
+        image: p.image || "",
+        broadCategory: p.broadCategory || p.category || "Office & Daily Use",
+        title: p.title || `Product #${idx + 1}`,
+        hook: p.hook || "",
+        details: p.details || "",
+        approxPriceLabel: p.approxPriceLabel || "",
+        amazonUrl: p.amazonUrl || "#",
+        reviewText: p.reviewText || "",
+      })).filter((p)=>p.asin);
+      applyFilters();
+    }
+  }
+
+  bindChips();
+  bindSearch();
+
+  bootstrapFallbackFromExisting();
+  syncOnce();
+  window.setInterval(syncOnce, REFRESH_MS);
+})();
+</script>
+</body>
+</html>

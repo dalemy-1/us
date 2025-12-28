@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Smart Picks • Multi-market</title>
+  <style>
+    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:#eef1f7;color:#111827}
+    header{background:linear-gradient(135deg,#0f172a,#020617);color:#fff;padding:18px 16px}
+    .wrap{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+    .brand{font-weight:800;letter-spacing:0.3px}
+    .sub{opacity:0.85;font-size:0.95rem}
+    .market-select{padding:10px 12px;border-radius:999px;border:1px solid rgba(255,255,255,0.25);background:rgba(2,6,23,0.65);color:#fff;font-size:1rem}
+    .market-select option{color:#111827}
+    main{max-width:1100px;margin:18px auto;padding:0 16px}
+    .card{background:#fff;border:1px solid #e5e7eb;border-radius:16px;padding:16px}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:12px}
+    a.btn{display:block;text-decoration:none;background:#111827;color:#fff;padding:10px 12px;border-radius:12px;text-align:center}
+    a.btn:hover{opacity:0.92}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <div>
+        <div class="brand">Smart Picks • Multi-market</div>
+        <div class="sub">Choose a market to view its product shortlist.</div>
+      </div>
+      <select id="marketSelect" class="market-select" aria-label="Select market">
+        <option value="us">US</option>
+        <option value="uk">UK</option>
+        <option value="de">DE</option>
+        <option value="fr">FR</option>
+        <option value="it">IT</option>
+        <option value="es">ES</option>
+        <option value="ca">CA</option>
+        <option value="jp">JP</option>
+      </select>
+    </div>
+  </header>
+  <main>
+    <div class="card">
+      <div>Quick links</div>
+      <div class="grid">
+        <a class="btn" href="./us/">US</a>
+        <a class="btn" href="./uk/">UK</a>
+        <a class="btn" href="./de/">DE</a>
+        <a class="btn" href="./fr/">FR</a>
+        <a class="btn" href="./it/">IT</a>
+        <a class="btn" href="./es/">ES</a>
+        <a class="btn" href="./ca/">CA</a>
+        <a class="btn" href="./jp/">JP</a>
+      </div>
+    </div>
+  </main>
+  <script>
+    document.getElementById("marketSelect").addEventListener("change", (e)=>{
+      const v = (e.target.value||"us").trim();
+      window.location.href = "./"+v+"/";
+    });
+  </script>
+</body>
+</html>
