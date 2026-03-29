@@ -1,4 +1,6 @@
 market,asin,title,keyword,卖家,store,remark,link,image_url,Discount Price,Commission,status
+US,B0G5WTD9ND,美国二维码桌牌免评点星,tap or scan sign,清风1,Lingy Store,Need Rating,https://amzn.to/47pm9jQ,https://m.media-amazon.com/images/I/51XHsZZbG-L._AC_.jpg,0.00,0.00,active
+US,1235896478,美国homedepot吊扇,https://www.homedepot.com/p/338266941,加拿大吊扇,Dovanpaul,Need Text Review,https://www.homedepot.com/p/338266941,http://154.48.226.95:5001/image/20260114/269d9f436c75479b9bc120d67b21b0c4.png,0.00,0.00,active
 US,1933875188,美国沃尔玛面罩,Morfone LED Light Mask,美国沃尔玛泳池,Morfone Official,Need Text Review,https://www.walmart.com/ip/seort/19338751886,http://154.48.226.95:5001/image/20260324/077a06f6f79241b7a54b41aa9ce04135.png,0.00,0.00,active
 US,B0F4RL1DH1,美国灯免评feedback,Donut Table Lamp,小龙团队,MIXL,Need Feedback,https://amzn.to/4s9FxKb,https://m.media-amazon.com/images/I/61mSmDJPVLL._AC_SX679_.jpg,3.00,0.00,active
 US,B0FVPBN1Q4,美国商务笔黑色图评,ZJEOSO Ballpoint Pens,美国笔筒图评,ZJEOSO-US,Need Text Review,https://amzn.to/4lpyBpp,https://m.media-amazon.com/images/I/61ZcAoGoBjL._AC_SY300_SX300_QL70_FMwebp_.jpg,0.00,0.00,active
@@ -42,7 +44,6 @@ US,B0FMY85CGR,美国收纳盒图评,Ear Wax Removal kit Storage Case,美国耳�
 Color: Black",https://amzn.to/4794A7t,https://m.media-amazon.com/images/I/816a14WizDL._AC_SL1500_.jpg,0.00,0.00,active
 US,B0GLFS27LV,美国麻将卡,mahjong cards 2026 ,美国工装裤送测, HoliDeals,Need Text Review,https://amzn.to/4brqcxb,https://m.media-amazon.com/images/I/71mgLpLy90L._AC_SL1500_.jpg,0.00,0.00,active
 US,B0FVSPZPMF,美国快速修补图评,epoxy putty,之星涓涓团队,zhuolinew,Need Image Review,https://amzn.to/3Nc3X6A,https://m.media-amazon.com/images/I/61BHudJHCfL._SL1500_.jpg,0.00,0.00,active
-US,B0G5WTD9ND,美国二维码桌牌免评点星,tap or scan sign,清风1,Lingy Store,Need Rating,https://amzn.to/47pm9jQ,https://m.media-amazon.com/images/I/51XHsZZbG-L._AC_.jpg,0.00,0.00,active
 US,1011889770,美国沃尔玛钱包,https://www.walmart.com/ip/KIVDIT-Wallets-for-Women-Slim-Wallet-with-RFID-Blocking-Bifold-Credit-Card-Holder/18505556584?classType=VARIANT&selectedSellerId=101188977,测评孙官团队,Tech-mall,Need Text Review,https://www.walmart.com/ip/KIVDIT-Wallets-for-Women-Slim-Wallet-with-RFID-Blocking-Bifold-Credit-Card-Holder/18505556584?classType=VARIANT&selectedSellerId=101188977,http://154.48.226.95:5001/image/20260203/13c8a465fe1c4115816486af80ef69ff.png,0.00,0.00,active
 US,B0FX1YN81W,美国痔疮膏,hemorrhoidal treatment,之星涓涓团队,heimenshangmao,Need Text Review,https://amzn.to/407oUlR,https://m.media-amazon.com/images/I/71mCulX9VtL._AC_SL1500_.jpg,0.00,0.00,active
 US,B0FLVXVVLX,美国女士香水,Pheromones Perfumes for Women,清风1,VivaFemme Store,Need Text Review,https://amzn.to/3OKzr3W,https://m.media-amazon.com/images/I/710SZWoZu1L._SL1500_.jpg,0.00,0.00,active
@@ -60,8 +61,8 @@ US,B0FCS3SV85,美国烟灰缸免评,cigar ashtrays for men,美国工装裤送测
 US,B0FSW4LV2J,美国护肤膏免评,beef tallow for skin olv,英国气球,Runco,No Review,https://amzn.to/4u1jYN0,https://m.media-amazon.com/images/I/61sdn-YovUL._SL1500_.jpg,0.00,0.00,active
 US,B0DYXZTVS5,美国诊所标牌,dental code sign,清风1,Lingy Store,Need Text Review,https://amzn.to/4pJnOa7,https://m.media-amazon.com/images/I/51G5siBh7aL._AC_SX466_.jpg,0.00,0.00,active
 US,B0GL735NPP,美国门牌,Custom Address Plaque,清风1,Godsilver,Need Text Review,https://amzn.to/4cRKvWT,https://m.media-amazon.com/images/I/51+yz+ZL7lL._AC_SX679_.jpg,0.00,0.00,active
-US,B0GFV9TLXQ,美国礼品袋包税,Large Happy Birthday Gift Bag with Tissue Papers and Greeting Card,啊波团队,JMANNI-US,Need Text Review,https://amzn.to/4bhWbB2,https://m.media-amazon.com/images/I/71pm0I-STiL._AC_SL1500_.jpg,0.00,0.00,active
 US,1737632278,美国沃尔玛投影,Morfone Christmas Projector Lights Outdoor,美国沃尔玛泳池,Morfone Official,Need Text Review,https://www.walmart.com/ip/Laser-Christmas-Projector-Lights-Outdoor-2-Colors-Red-Green-Holiday-Projector-Landscape-Spotlight-Decorations-for-House-Garden-Party/17376322784?classType=VARIANT&athbdg=L1400&from=/search,http://154.48.226.95:5001/image/20260226/287626f61c33492980ee8eea5291b401.png,0.00,0.00,active
+US,B0GFV9TLXQ,美国礼品袋包税,Large Happy Birthday Gift Bag with Tissue Papers and Greeting Card,啊波团队,JMANNI-US,Need Text Review,https://amzn.to/4bhWbB2,https://m.media-amazon.com/images/I/71pm0I-STiL._AC_SL1500_.jpg,0.00,0.00,active
 US,B0FB9JJ7BL,美国地毯贴,carpet tape,好时光团队, hongsengt,Need Text Review,https://amzn.to/4aW9RAq,https://m.media-amazon.com/images/I/71DgSQHeIRL._AC_SX569_.jpg,0.00,0.00,active
 US,B0F3X93FVQ,美国浴缸喷口,gold tub spout,好时光团队, fropohome,Need Text Review,https://amzn.to/3OG3IRu,https://m.media-amazon.com/images/I/51O8WaJQkhL._AC_SX679_.jpg,0.00,0.00,active
 US,B0FJFKSK3N,美国野营挡风板,Camping Stove Windscreen ,美国中介, BEST.CHOICES,Size: 10 Plates,https://amzn.to/4aZOrCE,https://m.media-amazon.com/images/I/61A3LQ+fEzL._AC_SX569_.jpg,0.00,0.00,active
