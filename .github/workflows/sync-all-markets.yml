@@ -27,7 +27,7 @@ jobs:
       - name: Download master CSV
         run: |
           set -euo pipefail
-          URL="http://154.48.226.28:801/8ce7d1f0-8aa0-4da7-afe2-84653fbe52ea"
+          URL="http://154.48.226.28:5001/admin/Product/export_csv"
           OUT="_all.csv"
 
           curl -L --fail --retry 3 --retry-delay 2 \
